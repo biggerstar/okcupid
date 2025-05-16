@@ -13,6 +13,7 @@ export function useReload() {
   reloadButton.style.backgroundColor = '#588698'
   reloadButton.style.color = 'white'
   reloadButton.style.cursor = 'pointer'
+  reloadButton.style.border = 'none'
 
   reloadButton.addEventListener('click', () => {
     console.log("🚀 ~ reloadButton.addEventListener ~ click:")
