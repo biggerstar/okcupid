@@ -122,6 +122,10 @@ window['isLogined'] = function () {
   return window['__PNS_RUNTIME__']?.['pageContext']?.['login'] === '1'
 }
 
+ipcRenderer.on('is-tiktok-logined', (event, { requestId, data }) => {
+  ipcRenderer.send(`is-tiktok-logined-response-${requestId}`, window['isLogined']())
+})
+
 function taskLivePage() {
   if (!inToktokLivePage()) return
   // const pageContext = window['__PNS_RUNTIME__']?.pageContext || {}

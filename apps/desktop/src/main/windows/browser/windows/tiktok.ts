@@ -5,6 +5,7 @@ import { app, WebContentsView } from 'electron';
 import os from 'os';
 import queuePkg from "p-queue";
 import { mainWindow } from "../../app/app";
+import { sendWithResponse } from "../common/sendWithResponse";
 import { updateAppConfig } from "../ipc/tiktok";
 
 const PQueue = queuePkg['default']
@@ -23,7 +24,7 @@ async function syncAppRegionConfig() {
   let isLogined = false
   const isRunning = tiktokTaskManager.isRunnning()
   if (isRunning) {
-    isLogined = await tiktokTaskManager.win.webContents.executeJavaScript('isLogined()').catch(res => Promise.resolve(false))
+    isLogined = await sendWithResponse(tiktokTaskManager.win, 'is-tiktok-logined', {})
   }
   // console.log("🚀 ~ syncAppRegionConfig ~ isLogined:", isLogined)
   updateAppConfig({ canCrawl: isLogined })
@@ -231,12 +232,6 @@ export class TiktokTaskManager {
     this.createWindow(false)
     syncAppRegionConfig()
     // this._startLoopClearStorage()
-    // this._loopReloadTimer = setInterval(async() => {
-    //   const isError = await this.win.webContents.executeJavaScript(`window['isSocketError']()`)
-    //   if (isError) {
-    //     this.win.webContents.reload()
-    //   }
-    // }, 60 * 1000)
   }
 
   public stopTask() {
