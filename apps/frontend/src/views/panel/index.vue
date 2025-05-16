@@ -360,10 +360,10 @@ function updateFromAppConfig(config: Record<string, any>) {
 
 async function syncRuningStatus() {
   // 使用 ShowStatus API 代替 RunningStatus API
-  const tkWindowShowStatus = await __API__.getTiktokWindowRunningStatus();
-  const tkBackstageShowStatus = await __API__.getTiktokBackstageWindowRunningStatus();
+  // const tkWindowShowStatus = await __API__.getTiktokWindowRunningStatus();
+  // const tkBackstageShowStatus = await __API__.getTiktokBackstageWindowRunningStatus();
   // 更新运行状态，任一窗口显示即认为在运行
-  runningStatus.value = tkWindowShowStatus || tkBackstageShowStatus;
+  runningStatus.value = await __API__.taskRunningStatus();
 }
 
 async function doUpdatePageInfoByAppConfig() {

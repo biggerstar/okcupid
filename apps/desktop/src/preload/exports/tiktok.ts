@@ -234,6 +234,9 @@ async function resumeSocketRoom(socket, roomId) {
 }
 
 async function addSocketTask() {
+  const canMoreLoad = await ipcRenderer.invoke('get-task-running-status')
+  console.log("🚀 ~ addSocketTask ~ canMoreLoad:", canMoreLoad)
+  if (!canMoreLoad) return
   roomMap.forEach(roomInfo => roomInfo.done && roomMap.delete(roomInfo.room_id))
   if (socketConcurrency <= roomMap.size) return
   const isError = window['isSocketError']()

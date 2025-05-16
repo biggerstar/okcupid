@@ -1,14 +1,11 @@
 import { globalEnv } from "@/global/global-env";
 import { globalMainPathParser } from "@/global/global-main-path-parser";
 import { preventDevtools } from "@/main/interceptors/devtools/prevent-devtools";
-import { choice } from "@/utils/array";
 import { app, WebContentsView } from 'electron';
 import os from 'os';
 import queuePkg from "p-queue";
 import { mainWindow } from "../../app/app";
-import { parseTiktokFeed } from "../common/parse-tiktok-feed";
-import { canLoadMoreFeed, saveFeedList, updateAppConfig } from "../ipc/tiktok";
-import { getFeedInfo } from "../request-api/get-load-more-room-info";
+import { updateAppConfig } from "../ipc/tiktok";
 
 const PQueue = queuePkg['default']
 
@@ -63,7 +60,7 @@ export class TiktokTaskManager {
     this.win.webContents.setAudioMuted(true)
 
     if (globalEnv.isDev) {
-      this.win.webContents.openDevTools()
+      // this.win.webContents.openDevTools()
     }
     mainWindow.win.addListener('resize', () => this.fllowResize(isShow))
     this.interceptRequest()
@@ -204,44 +201,6 @@ export class TiktokTaskManager {
       this.createWindow(true);
     }
     return true;
-  }
-
-  private async _addNewTask(region) {
-    const isCanAddMore = await canLoadMoreFeed()
-    if (!isCanAddMore) {
-      console.log('[canLoadMoreFeed] 当前无需添加新任务')
-      return
-    }
-
-    const typeInfoList = [
-      { type: 'live_mt_pc_web_rec_tab_loadmore', from: '热门' },
-      { type: 'pc_web_side_follow_default', from: '广场' },
-      { type: 'pc_web_suggested_host', from: '推荐' },
-    ]
-    const addNum = queue.concurrency - queue.size - queue.pending
-    for (let i = 0; i < addNum; i++) {
-      queue.add(async () => {
-        const typeInfo = choice(typeInfoList)
-        return getFeedInfo(typeInfo.type, region)
-          .then((res) => {
-            saveFeedList(parseTiktokFeed(res.data, typeInfo.from))
-          })
-          .catch((error) => {
-            console.log(error.message);
-          });
-      })
-    }
-  }
-
-  private async _startMainProcessFeedTask() {
-    const region = await syncAppRegionConfig()
-    // if (!region) {
-    //   dialog.showMessageBox({ message: '没有找到当前 IP 所属区域' })
-    //   return
-    // }
-    // console.log("当前 IP 区域为: ", region)
-    // this._addNewTask(region)
-    // this._loopTimer = setInterval(() => this._addNewTask(region), 6000)
   }
 
   private _startLoopClearStorage() {

@@ -79,6 +79,9 @@ const __API__ = {
   async getTiktokBackstageWindowRunningStatus() {
     return ipcRenderer.invoke('get-tiktok-backstage-window-running-status')
   },
+  async taskRunningStatus(){
+    return ipcRenderer.invoke('get-task-running-status') 
+  },
   async getTiktokWindowShowStatus() {
     return ipcRenderer.invoke('get-tiktok-window-show-status')
   },

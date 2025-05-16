@@ -154,7 +154,9 @@ loopClearDatabase()
 export class TaskManager {
   private _autoUploadAnchorDataTimer: any
   private _autoUploadBossDataTimer: any
+  private _running: boolean
   constructor() {
+    this._running = false
     app.whenReady()
       .then(async() => {
         await sleep(2000)
@@ -166,13 +168,18 @@ export class TaskManager {
         });
       })
   }
+  isRunning(){
+    return this._running
+  }
   startTask() {
+    if (this._running) return
     // if (!isLogined()) return
     this._autoUploadAnchorDataTimer = setInterval(autoUploadAnchorData, 5000)
     this._autoUploadBossDataTimer = setInterval(autoUploadBossData, 5000)
-
+    
     tiktokTaskManager.startTask()
     tiktokBackstageWindowManager.startTask()
+    this._running = true
   }
 
   stopTask() {
@@ -180,6 +187,7 @@ export class TaskManager {
     clearInterval(this._autoUploadBossDataTimer)
     tiktokTaskManager.stopTask()
     tiktokBackstageWindowManager.stopTask()
+    this._running = false
   }
 
   // 隐藏TK窗口 - 调用TiktokTaskManager中的hideWindow方法

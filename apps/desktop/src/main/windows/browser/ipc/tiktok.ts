@@ -7,6 +7,7 @@ import { ipcMain } from 'electron';
 import { In, IsNull, Like, MoreThan, MoreThanOrEqual, Not } from 'typeorm';
 import { globalAppConfig, syncAppConfig } from '../global.app.config';
 import { getUserRegion } from '../request-api/get-user-region';
+import { taskManager } from '../windows/task';
 import { tiktokTaskManager } from '../windows/tiktok';
 
 const maxQueueLimit = 20
@@ -98,6 +99,7 @@ export async function saveFeedList(queueLiveList = []) {
 }
 
 export async function canLoadMoreFeed() {
+  if (!taskManager.isRunning()) return false
   const nowFeedQueue = await QueueLiveEntity.count({
     select: ['process'],
     where: {

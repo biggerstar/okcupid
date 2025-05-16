@@ -246,7 +246,8 @@ EventTarget.prototype.addEventListener = function (...args) {
 
 async function updateCanCheckStatus(status: boolean) {
   const config = await getAppConfig()
-  if (config.checkStatus === status) return
+  const checkStatus = config.checkStatus === '1'
+  if (checkStatus === status) return
   ipcRenderer.invoke('update-app-config', { checkStatus: !!status })
   consoleLog("更新可查验状态为: ", status)
 }

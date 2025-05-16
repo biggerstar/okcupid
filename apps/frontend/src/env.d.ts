@@ -22,6 +22,7 @@ declare global {
     getCurrentStat(): Promise<Record<any, any>>
     getTiktokWindowRunningStatus(): Promise<boolean>
     getTiktokBackstageWindowRunningStatus(): Promise<boolean>
+    taskRunningStatus(): Promise<boolean>
     getTiktokWindowShowStatus(): Promise<boolean>
     getTiktokBackstageWindowShowStatus(): Promise<boolean>
     getAppConfig(): Promise<Record<any, any>>

@@ -203,7 +203,9 @@ export function createTaskIpc() {
   ipcMain.handle('get-checked-counts-info', async (_, takeCount = 60) => {
     return await getCheckedCountInfo(takeCount);
   })
-
+  ipcMain.handle('get-task-running-status', async (_) => {
+    return taskManager.isRunning();
+  })
   ipcMain.handle('app-login', async (_, form) => {
     const { data } = await request.post('/bsanchor/sysApi/open/login', {
       loginName: form.username,

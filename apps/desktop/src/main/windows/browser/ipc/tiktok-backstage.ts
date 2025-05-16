@@ -5,6 +5,7 @@ import { toChineseTime } from '@/utils/time';
 import { ipcMain } from 'electron';
 import { IsNull, MoreThanOrEqual } from 'typeorm';
 import { globalAppConfig } from '../global.app.config';
+import { taskManager } from '../windows/task';
 import { tiktokBackstageWindowManager } from '../windows/tiktok-backstage';
 import { updateAppConfig } from './tiktok';
 
@@ -12,6 +13,7 @@ setTimeout(canCheckAnchor, 3000)
 setInterval(canCheckAnchor, 10000)
 
 export async function canCheckAnchor() {
+  if (!taskManager.isRunning()) return false
   if (!globalAppConfig.checkArea || !globalAppConfig.region) return false
   if (globalAppConfig.checkArea !== globalAppConfig.region) return false
   // 获取当前时间
