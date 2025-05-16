@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 const formatTimeField = (time: string | null): string => {
   if (!time) return '';
   try {
-    return dayjs(time).format('MM-DD HH:mm:ss');
+    return dayjs(+time).subtract(8, 'hour').format('MM-DD HH:mm:ss');
   } catch (error) {
     return time || '';
   }
@@ -44,14 +44,20 @@ export function useGridFormSchema(): VbenFormSchema[] {
 export function useColumns(): VxeTableGridOptions['columns'] {
   return [
     {
-      type: 'seq',
+      type: 'checkbox',
+      title: '',
+      width: 50,
+    },
+    {
+      field: 'index',
       title: '序号',
-      width: 60,
+      width: 80,
     },
     {
       field: 'display_id',
       title: '主播ID',
       width: 150,
+      sortable: true,
       slots: {
         default: 'display_id'
       },
@@ -122,12 +128,14 @@ export function useColumns(): VxeTableGridOptions['columns'] {
       field: 'created_time',
       title: '创建时间',
       width: 120,
+      sortable: true,
       formatter: ({ cellValue }) => formatTimeField(cellValue),
     },
     {
       field: 'updated_time',
       title: '更新时间',
       visible: false,
+      sortable: true,
       width: 120,
       formatter: ({ cellValue }) => formatTimeField(cellValue),
     },
@@ -135,12 +143,14 @@ export function useColumns(): VxeTableGridOptions['columns'] {
       field: 'upload_time',
       title: '上传时间',
       visible: false,
+      sortable: true,
       width: 120,
       formatter: ({ cellValue }) => formatTimeField(cellValue),
     },
     {
       field: 'check_time',
       title: '查验时间',
+      sortable: true,
       width: 120,
       formatter: ({ cellValue }) => formatTimeField(cellValue),
     },

@@ -34,9 +34,14 @@ const [Grid, gridApi] = useVbenVxeGrid({
     },
     pagerConfig: {
       pageSize: 50,
-      pageSizes: [50,100,200,500,1000,2000,5000,10000]
+      pageSizes: [50, 200, 500, 2000, 5000, 10000, 50000, 100000, 200000, 500000, 1000000]
     },
-    exportConfig:{},
+    checkboxConfig: {
+      range: true
+    },
+    exportConfig: {
+      types: ['csv', 'txt']
+    },
     proxyConfig: {
       ajax: {
         query: async ({ page }, formValues) => {
@@ -46,7 +51,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
             pageSize: page.pageSize,
             ...formValues,
           });
-          // console.log("🚀 ~ query: ~ res:", res)
+          console.log("🚀 ~ query: ~ res:", res)
           return res
         },
       },
@@ -61,12 +66,12 @@ const [Grid, gridApi] = useVbenVxeGrid({
   } as VxeTableGridOptions<CompanyUserApi.User>,
 });
 
-function getTikTokLiveUrl(user_unionid: string, isLive: boolean = true){
-  let url =''
+function getTikTokLiveUrl(user_unionid: string, isLive: boolean = true) {
+  let url = ''
   if (isLive) {
-      url =  `https://www.tiktok.com/@${user_unionid}/live`
-    }else{
-      url =  `https://www.tiktok.com/@${user_unionid}`
+    url = `https://www.tiktok.com/@${user_unionid}/live`
+  } else {
+    url = `https://www.tiktok.com/@${user_unionid}`
   }
   return url
 }

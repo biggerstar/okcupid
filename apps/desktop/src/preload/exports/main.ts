@@ -121,8 +121,7 @@ getIpRegion().then(res => {
   })
 })
 
-// 轮询运行状态，如果出现采集断层则重启 TK窗口
-
+// 轮询运行状态，如果出现采集断层则重启 TK 窗口
 async function tryCheckRestart() {
   const isRunning = await __API__.getTiktokWindowRunningStatus()
   if (!isRunning) return
@@ -140,5 +139,6 @@ async function tryCheckRestart() {
 }
 
 tryCheckRestart()
-setInterval(tryCheckRestart, 5 * 60 * 1000)
+setInterval(tryCheckRestart, 5 * 60 * 1000)  // 每5分钟检查是否需要重启 TK 任务
+setInterval(() => location.reload(), 3 * 60 * 60 * 1000)  // 每三小时刷新一次主程序页面
 

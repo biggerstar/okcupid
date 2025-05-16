@@ -7,7 +7,7 @@ export function createUserFinderIpc() {
   ipcMain.handle('get-anchor-list', async (_, options = {}) => {
     const page = options.page - 1 || 0
     const pageSize = options.pageSize || 50
-    const res = await QueueLiveEntity.find({
+    const [res, total] = await QueueLiveEntity.findAndCount({
       where: {
         process: 'completed',
         region: Not(IsNull()),
@@ -19,23 +19,33 @@ export function createUserFinderIpc() {
       skip: page * pageSize
     })
     return {
-      items: res,
-      total: res.length
+      total,
+      items: res.map((item, index)=> {
+        return {
+          ...item,
+          index: page * pageSize + index + 1
+        }
+      }),
     }
   })
 
   ipcMain.handle('get-boss-list', async (_, options = {}) => {
     const page = options.page - 1 || 0
     const pageSize = options.pageSize || 50
-    const res = await TopBossUserEntity.find({
+    const [res, total] = await TopBossUserEntity.findAndCount({
       where: {
       },
       take: pageSize,
       skip: page * pageSize
     })
     return {
-      items: res,
-      total: res.length
+      total,
+      items: res.map((item, index)=> {
+        return {
+          ...item,
+          index: page * pageSize + index + 1
+        }
+      }),
     }
   })
 }

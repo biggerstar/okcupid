@@ -43,14 +43,20 @@ export function useGridFormSchema(): VbenFormSchema[] {
 export function useColumns(): VxeTableGridOptions['columns'] {
   return [
     {
-      type: 'seq',
+      type: 'checkbox',
+      title: '',
+      width: 50,
+    },
+    {
+      field: 'index',
       title: '序号',
-      width: 60,
+      width: 80,
     },
     {
       field: 'display_name',
       title: '老板ID',
       width: 160,
+      sortable: true,
       slots: {
         default: 'display_name'
       },
@@ -58,6 +64,7 @@ export function useColumns(): VxeTableGridOptions['columns'] {
     {
       field: 'from_live_display_name',
       title: '来自直播间',
+      sortable: true,
       slots: {
         default: 'from_live_display_name'
       },
@@ -65,7 +72,7 @@ export function useColumns(): VxeTableGridOptions['columns'] {
     {
       field: 'nickname',
       title: '昵称',
-      // sortable: true,
+      sortable: true,
     },
     {
       field: 'fan_ticket',
@@ -76,11 +83,13 @@ export function useColumns(): VxeTableGridOptions['columns'] {
     {
       field: 'created_time',
       title: '创建时间',
+      sortable: true,
       formatter: ({ cellValue }) => formatTimeField(cellValue),
     },
     {
       field: 'updated_time',
       title: '更新时间',
+      sortable: true,
       visible: false,
       formatter: ({ cellValue }) => formatTimeField(cellValue),
     },

@@ -5,9 +5,11 @@ import { whenDocumentElementStart } from "@/utils/dom"
 import { ipcRenderer } from "electron"
 import fs from 'fs'
 import { checkErrorPage } from "../common/check-error-page"
+import { useReload } from "../common/use-reload"
 
 console.log('tiktok', location.href)
 
+useReload()
 const socketAllList = []
 const socketConcurrency = 4
 const taskInterval = 15000

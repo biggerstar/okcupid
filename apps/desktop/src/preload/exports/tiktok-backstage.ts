@@ -2,6 +2,7 @@ import { whenDocumentElementStart } from "@/utils/dom";
 import { sleep } from "@/utils/time";
 import { ipcRenderer } from "electron";
 import { checkErrorPage } from "../common/check-error-page";
+import { useReload } from "../common/use-reload";
 
 var selectorAddHostButton = '[data-id="add-host-btn"]';
 var selectorHostInput = '[data-testid="inviteHostTextArea"]';
@@ -192,6 +193,8 @@ function releaseDragIcon(xStr, yStr) {
 }
 
 /* --------------------------------------------------------------------------------------- */
+
+useReload()
 
 window['fillHost'] = fillHost
 window['submitHost'] = submitHost

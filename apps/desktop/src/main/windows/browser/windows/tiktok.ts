@@ -63,7 +63,7 @@ export class TiktokTaskManager {
     this.win.webContents.setAudioMuted(true)
 
     if (globalEnv.isDev) {
-      // this.win.webContents.openDevTools()
+      this.win.webContents.openDevTools()
     }
     mainWindow.win.addListener('resize', () => this.fllowResize(isShow))
     this.interceptRequest()
@@ -120,11 +120,6 @@ export class TiktokTaskManager {
       this.win.setVisible(true)
     }
     this.win.setBounds({ x, y, width: bounds.width - (bounds.width / 7.5), height: bounds.height })
-  }
-
-  private isInLivePage() {
-    if (!this.isRunnning()) return false
-    return this.win.webContents.getURL().startsWith('https://www.tiktok.com/live')
   }
 
   private interceptRequest() {

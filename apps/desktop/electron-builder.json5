@@ -11,14 +11,14 @@
     "marketing",
   ],
   "mac": {
-    "icon": "public/logo.jpg",
+    "icon": "public/icons/mac/icon.icns",
     "target": [
       "dmg"
     ],
     "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
   },
   "win": {
-    "icon": "public/logo.jpg",
+    "icon": "public/icons/win/icon.ico",
     "target": [
       {
         "target": "nsis",
@@ -36,7 +36,7 @@
     "deleteAppDataOnUninstall": false
   },
   "linux": {
-    "icon": "public/logo.jpg",
+    "icon": "public/icons/png/64x64.png",
     "target": [
       "AppImage"
     ],
