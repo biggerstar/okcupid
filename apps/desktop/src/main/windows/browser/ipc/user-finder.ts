@@ -20,7 +20,7 @@ export function createUserFinderIpc() {
     })
     return {
       total,
-      items: res.map((item, index)=> {
+      items: res.map((item, index) => {
         return {
           ...item,
           index: page * pageSize + index + 1
@@ -40,12 +40,20 @@ export function createUserFinderIpc() {
     })
     return {
       total,
-      items: res.map((item, index)=> {
+      items: res.map((item, index) => {
         return {
           ...item,
           index: page * pageSize + index + 1
         }
       }),
     }
+  })
+
+  ipcMain.handle('delete-anchor-list', async (_, ids = []) => {
+    QueueLiveEntity.delete(ids)
+  })
+
+  ipcMain.handle('delete-boss-list', async (_, ids = []) => {
+    TopBossUserEntity.delete(ids)
   })
 }

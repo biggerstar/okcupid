@@ -102,6 +102,12 @@ const __TABLE_API__ = {
   async getBossList(options) {
     return ipcRenderer.invoke('get-boss-list', options)
   },
+  async deleteAnchorList(options) {
+    return ipcRenderer.invoke('delete-anchor-list', options)
+  },
+  async deleteBossList(options) {
+    return ipcRenderer.invoke('delete-boss-list', options)
+  },
 }
 contextBridge.exposeInMainWorld("__API__", __API__)
 contextBridge.exposeInMainWorld('__TABLE_API__', __TABLE_API__)

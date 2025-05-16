@@ -33,6 +33,7 @@ declare global {
   declare const __TABLE_API__: {
     getAnchorList(options: any): any
     getBossList(options: any): any
-
+    deleteAnchorList(ids: string[]): any
+    deleteBossList(ids: string[]): any
   }
 }

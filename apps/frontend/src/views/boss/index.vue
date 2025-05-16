@@ -73,6 +73,16 @@ function getTikTokLiveUrl (user_unionid: string, isLive: boolean = false){
   }
   return url
 }
+
+function deleteRows() {
+  const grid = gridApi.grid
+  const selecterRecord = grid.getCheckboxRecords()
+  console.log("🚀 ~ deleteRows ~ selecterRecord:", selecterRecord)
+  const deleteIds = selecterRecord.map(item => item.id)
+  __TABLE_API__.deleteBossList(deleteIds)
+  gridApi.reload()
+}
+
 </script>
 <template>
   <Page auto-content-height>
@@ -85,6 +95,11 @@ function getTikTokLiveUrl (user_unionid: string, isLive: boolean = false){
       <template #from_live_display_name="{ row }">
         <Button type="link" target="_blank" :href="getTikTokLiveUrl(row['from_live_display_name'], true )">
           {{ row['from_live_display_name'] }}
+        </Button>
+      </template>
+      <template #toolbar-tools>
+        <Button class="mr-2" type="primary" danger @click="deleteRows()">
+          删除
         </Button>
       </template>
     </Grid>
