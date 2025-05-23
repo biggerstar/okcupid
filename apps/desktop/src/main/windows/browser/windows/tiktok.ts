@@ -3,12 +3,7 @@ import { globalMainPathParser } from "@/global/global-main-path-parser";
 import { preventDevtools } from "@/main/interceptors/devtools/prevent-devtools";
 import { app, WebContentsView } from 'electron';
 import os from 'os';
-import queuePkg from "p-queue";
 import { mainWindow } from "../../app/app";
-import { sendWithResponse } from "../common/sendWithResponse";
-import { updateAppConfig } from "../ipc/tiktok";
-
-const PQueue = queuePkg['default']
 
 const macUA = `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.6998.88 Safari/537.36`
 const windowUA = `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0`
@@ -17,21 +12,6 @@ const UA = os.platform() === 'darwin' ? macUA : windowUA
 app.userAgentFallback = UA
 // 设置应用级首选语言（支持多个语言，按优先级排序）
 app.commandLine.appendArgument('lang=zh-CN')
-
-const queue = new PQueue({ concurrency: 3 })
-
-async function syncAppRegionConfig() {
-  let isLogined = false
-  const isRunning = tiktokTaskManager.isRunnning()
-  if (isRunning) {
-    isLogined = await sendWithResponse(tiktokTaskManager.win, 'is-tiktok-logined', {})
-  }
-  // console.log("🚀 ~ syncAppRegionConfig ~ isLogined:", isLogined)
-  updateAppConfig({ canCrawl: isLogined })
-}
-
-setTimeout(() => syncAppRegionConfig(), 2000)
-setInterval(() => syncAppRegionConfig(), 3000)
 
 export class TiktokTaskManager {
   public win: WebContentsView | null = null
@@ -76,10 +56,6 @@ export class TiktokTaskManager {
         return { action: 'deny' }
       }
       return { action: 'allow' }
-    })
-
-    this.win.webContents.addListener('did-finish-load', () => {
-      setTimeout(syncAppRegionConfig, 3000)
     })
 
     this.win.webContents.on('will-attach-webview', (event) => {
@@ -230,7 +206,6 @@ export class TiktokTaskManager {
   public async startTask() {
     if (this.isRunnning()) return
     this.createWindow(false)
-    syncAppRegionConfig()
     // this._startLoopClearStorage()
   }
 

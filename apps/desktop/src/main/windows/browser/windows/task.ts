@@ -7,6 +7,7 @@ import { app } from 'electron';
 import { IsNull, LessThan, Like, MoreThan, Not } from 'typeorm';
 import { mainWindow } from '../../app/app';
 import { globalAppConfig } from '../global.app.config';
+import { updateAppConfig } from '../ipc/tiktok';
 import { addBatchBoss } from '../request-api/upload-boss-data';
 import { addBatchAnchors } from '../request-api/upload-check-data';
 import { tiktokTaskManager } from './tiktok';
@@ -158,7 +159,7 @@ export class TaskManager {
   constructor() {
     this._running = false
     app.whenReady()
-      .then(async() => {
+      .then(async () => {
         await sleep(2000)
         mainWindow.win.webContents.on('did-navigate-in-page', (_, url) => {
           const urlInfo = new URL(url);
@@ -167,8 +168,12 @@ export class TaskManager {
           }
         });
       })
+
+    setInterval(async () => {
+      updateAppConfig({ canCrawl: false })
+    }, 3000)
   }
-  isRunning(){
+  isRunning() {
     return this._running
   }
   startTask() {
@@ -176,7 +181,7 @@ export class TaskManager {
     // if (!isLogined()) return
     this._autoUploadAnchorDataTimer = setInterval(autoUploadAnchorData, 5000)
     this._autoUploadBossDataTimer = setInterval(autoUploadBossData, 5000)
-    
+
     tiktokTaskManager.startTask()
     tiktokBackstageWindowManager.startTask()
     this._running = true

@@ -1,5 +1,5 @@
 {
-  "name": "tiktok-process",
+  "name": "@tiktok/process",
   "private": true,
   "version": "0.0.1",
   "main": "marketing/main/index.js",

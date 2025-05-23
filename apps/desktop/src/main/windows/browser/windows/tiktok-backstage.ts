@@ -290,6 +290,7 @@ export class TiktokBackstageWindowManager {
 
   public async startTask() {
     if (this.isRunnning()) return
+    this.stopTask()
     this.createWindow(false)
   }
 
