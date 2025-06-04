@@ -51,7 +51,8 @@ export class TiktokBackstageWindowManager {
         webSecurity: false,
         // preload: globalMainPathParser.resolvePreload('tiktok-backstage-fetch.mjs').toString(),
         preload: globalMainPathParser.resolvePreload('tiktok-backstage.cjs').toString(),
-        partition: 'persist:tiktok-backstage-test12',
+        // partition: 'persist:tiktok-backstage-test12',
+        partition: 'persist:tiktok-backstage-test121',
       },
     });
     mainWindow.win.contentView.addChildView(this.win)

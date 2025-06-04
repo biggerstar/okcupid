@@ -169,9 +169,7 @@ export class TaskManager {
         });
       })
 
-    setInterval(async () => {
-      updateAppConfig({ canCrawl: false })
-    }, 3000)
+    setTimeout(async () => updateAppConfig({ canCrawl: false }), 3000)
   }
   isRunning() {
     return this._running

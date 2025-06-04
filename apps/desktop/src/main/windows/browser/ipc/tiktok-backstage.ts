@@ -1,9 +1,10 @@
+import { AREA_MAP } from '@/config';
 import { AppDataSource } from '@/orm/data-source';
 import { CheckRecordEntity } from '@/orm/entities/check-record';
 import { QueueLiveEntity } from '@/orm/entities/queue-live';
 import { toChineseTime } from '@/utils/time';
 import { ipcMain } from 'electron';
-import { IsNull, MoreThanOrEqual } from 'typeorm';
+import { In, IsNull, MoreThanOrEqual } from 'typeorm';
 import { globalAppConfig } from '../global.app.config';
 import { taskManager } from '../windows/task';
 import { tiktokBackstageWindowManager } from '../windows/tiktok-backstage';
@@ -12,11 +13,22 @@ import { updateAppConfig } from './tiktok';
 setTimeout(canCheckAnchor, 3000)
 setInterval(canCheckAnchor, 10000)
 
+// 获取所属大区的所有国家，如果大区内没找到国家则认为当前使用的 region 自成大区
+export function getLargeRegionAllcountry(region: string): string[] {
+  let result: string[] = []
+  for (const largeRegion of AREA_MAP) {
+    if (largeRegion.find(reg => reg.area === region)) {
+      result = largeRegion.map(item => item.area);
+      break
+    }
+  }
+  if (!result.length && globalAppConfig.region === region) {
+    result = [globalAppConfig.region];
+  }
+  return result;
+}
+
 export async function canCheckAnchor() {
-  if (!taskManager.isRunning()) return false
-  if (!globalAppConfig.checkArea || !globalAppConfig.region) return false
-  if (globalAppConfig.checkArea !== globalAppConfig.region) return false
-  // 获取当前时间
   const now = new Date();
 
   // 计算一小时前的时间戳
@@ -54,6 +66,8 @@ export async function canCheckAnchor() {
   if (dayCount >= +globalAppConfig.dayLimit) {
     return false
   }
+  if (!globalAppConfig.checkArea || !globalAppConfig.region) return false
+  if (!getLargeRegionAllcountry(globalAppConfig.checkArea).includes(globalAppConfig.region)) return false
   if (globalAppConfig.autoCheck !== '1') return false
   return true
 }
@@ -70,12 +84,14 @@ export function createTiktokBackstageIpc() {
   })
 
   ipcMain.handle('get-next-tiktok-backstage-anthor-list', async (_) => {
-    if (!(await canCheckAnchor())) return []
+    if (!(await canCheckAnchor()) || !taskManager.isRunning()) return []
+    const largeArea = getLargeRegionAllcountry(globalAppConfig.checkArea);
+    if (!largeArea.length) return [];
     const anthorLimit = 30
     if (!globalAppConfig.region) return []
     const anthorList = await QueueLiveEntity.find({
       where: {
-        region: globalAppConfig.region,
+        region: In(largeArea),
         check_result: IsNull(),
         check_time: IsNull(),
         fans: MoreThanOrEqual(globalAppConfig.minFans || 0),

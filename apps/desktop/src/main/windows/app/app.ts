@@ -1,5 +1,7 @@
 import { BaseHashRouterBrowserWindow } from "@/main/interface";
 import { BaseApplication } from "@/main/windows/app/base-application";
+import os from 'node:os';
+import process from "node:process";
 
 export class MainWindow extends BaseApplication<BaseHashRouterBrowserWindow> {
   /** 主窗口对象引用 */
@@ -27,7 +29,7 @@ export class MainWindow extends BaseApplication<BaseHashRouterBrowserWindow> {
     this.win.webContents.setBackgroundThrottling(false)
     // this.win.gotoHashRouter({hash: '/'}).then();
     this.win.gotoHashRouter({ hash: '/panel' }).then();
-
+    console.log(os.arch(), process.arch);
     this.win.webContents.on('did-navigate-in-page', (_, url) => {
       const urlInfo = new URL(url);
       // console.log(urlInfo)

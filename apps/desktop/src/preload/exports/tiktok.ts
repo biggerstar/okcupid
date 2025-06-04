@@ -390,6 +390,7 @@ async function main() {
   loopSocketRoomInfo()
   loopFetchFeeds()
   setInterval(() => {
+    console.log(`🚀 ~ setInterval ~ setInterval:`, !!window['isLogined']() )
     ipcRenderer.invoke('update-app-config', { canCrawl: !!window['isLogined']() })
   }, 10000)
   setInterval(() => {

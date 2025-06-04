@@ -9,6 +9,7 @@ import { globalAppConfig, syncAppConfig } from '../global.app.config';
 import { getUserRegion } from '../request-api/get-user-region';
 import { taskManager } from '../windows/task';
 import { tiktokTaskManager } from '../windows/tiktok';
+import { getLargeRegionAllcountry } from './tiktok-backstage';
 
 const maxQueueLimit = 20
 
@@ -206,6 +207,7 @@ export function createTiktokIpc() {
     if (Object.keys(globalAppConfig).length === 0) {
       await syncAppConfig()
     }
+    const largeArea = getLargeRegionAllcountry(globalAppConfig.region)
     const now = new Date();
     // 计算一天前的时间戳
     const oneDayAgo = new Date(now);
@@ -214,36 +216,31 @@ export function createTiktokIpc() {
     const collectedCount = await QueueLiveEntity.count()
     const qualifiedCount = await QueueLiveEntity.count({
       where: {
-        region: Not(IsNull()),
+        region: In(largeArea),
         fans: MoreThanOrEqual(globalAppConfig.minFans || 0),
         coin: MoreThanOrEqual(globalAppConfig.anchorMinCoin || 0),
       }
     })
     const qualifiedCountByOneDay = await QueueLiveEntity.count({
       where: {
-        region: Not(IsNull()),
+        region: In(largeArea),
         fans: MoreThanOrEqual(globalAppConfig.minFans || 0),
         coin: MoreThanOrEqual(globalAppConfig.anchorMinCoin || 0),
         created_time: MoreThan(oneDayAgo)
       }
     })
-    // const checkedCount = await QueueLiveEntity.count({
-    //   where: {
-    //     process: 'completed', 
-    //   },
-    // })
     const regionQualifiedCount = await QueueLiveEntity.count({
       where: {
+        region: In(largeArea),
         fans: MoreThanOrEqual(globalAppConfig.minFans || 0),
         coin: MoreThanOrEqual(globalAppConfig.anchorMinCoin || 0),
-        region: globalAppConfig.region
       }
     })
     const regionQualifiedCountByOneDay = await QueueLiveEntity.count({
       where: {
+        region: In(largeArea),
         fans: MoreThanOrEqual(globalAppConfig.minFans || 0),
         coin: MoreThanOrEqual(globalAppConfig.anchorMinCoin || 0),
-        region: globalAppConfig.region,
         created_time: MoreThanOrEqual(oneDayAgo)
       }
     })
