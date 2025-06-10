@@ -1,7 +1,17 @@
 // # 配置信息
 
+import { globalEnv } from "./global/global-env";
+
+
 /* ----------------  服务器地址  --------------------*/
-export const SERVER_API = 'http://43.135.20.146:7071'
+// 测试服务器地址
+const TEST_SERVER_API = 'http://119.28.92.31:7071'
+// 正式服务器地址
+const PROD_SERVER_API = 'http://43.135.20.146:7071'
+export const SERVER_API = globalEnv.isDev ? TEST_SERVER_API : PROD_SERVER_API
+
+/* ---------------  验证码服务器地址  ----------------*/
+export const CAPCHA_SERVER_API = 'http://119.28.92.31:9999'
 
 /* ---------------- 合并查验的区域 ------------------ */
 // 澳大利亚

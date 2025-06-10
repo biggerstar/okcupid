@@ -5,6 +5,7 @@ declare global {
   declare interface Window {
     electronTitlebar: CustomTitlebar
     __VBEN_ADMIN_METADATA__: Record<any, any>
+    _SERVER_API_: string
   }
 
   declare const __API__: {

@@ -1,6 +1,5 @@
 import { globalEnv } from "@/global/global-env";
 import { globalMainPathParser } from "@/global/global-main-path-parser";
-import { preventDevtools } from "@/main/interceptors/devtools/prevent-devtools";
 import { app, WebContentsView } from 'electron';
 import os from 'os';
 import { mainWindow } from "../../app/app";
@@ -40,8 +39,8 @@ export class TiktokTaskManager {
     this.win.webContents.loadURL(url)
     this.win.webContents.setAudioMuted(true)
 
+    this.win.webContents.openDevTools()
     if (globalEnv.isDev) {
-      // this.win.webContents.openDevTools()
     }
     mainWindow.win.addListener('resize', () => this.fllowResize(isShow))
     this.interceptRequest()
@@ -77,7 +76,7 @@ export class TiktokTaskManager {
       this.stopTask()
     })
     // other
-    preventDevtools(this.win.webContents.session)
+    // preventDevtools(this.win.webContents.session)
   }
 
   private fllowResize(isShow: boolean = true, x: number = 0, y: number = 0) {
@@ -134,6 +133,19 @@ export class TiktokTaskManager {
         callback({})
       }
     )
+
+    this.win.webContents.session.webRequest.onHeadersReceived(
+      {
+        urls: ['http://*/*', 'https://*/*'],
+      }, (detail, callback) => {
+        const { responseHeaders } = detail
+        delete responseHeaders['content-security-policy']
+        delete responseHeaders['content-security-policy-report-only']
+        // if (detail.url === "https://www.tiktok.com/live") {
+        //   console.log(`🚀 ~ TiktokTaskManager ~ interceptRequest ~ detail:`, detail)
+        // }
+        callback({ responseHeaders })
+      })
   }
 
   private _loopTimer = null

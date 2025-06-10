@@ -1,3 +1,4 @@
+import { SERVER_API } from '@/config';
 import { contextBridge, ipcRenderer } from 'electron/renderer';
 import { useTitlebar } from "../common/titlebar";
 
@@ -111,6 +112,7 @@ const __TABLE_API__ = {
 }
 contextBridge.exposeInMainWorld("__API__", __API__)
 contextBridge.exposeInMainWorld('__TABLE_API__', __TABLE_API__)
+contextBridge.exposeInMainWorld('_SERVER_API_', SERVER_API)
 
 
 async function getIpRegion() {

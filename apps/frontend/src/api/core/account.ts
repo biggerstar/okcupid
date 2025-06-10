@@ -69,7 +69,31 @@ export function getAccountPermissions() {
 /**
  * 账户登出
  */
-export function logout() {
+export async function logout() {
   // return requestClient.get('/account/logout');
+  const config = await __API__.getAppConfig()
+  if (!config.userId || !config.token) {
+    return
+  }
+  const data = JSON.stringify({
+    "userId": config.userId,
+    "token": config.token
+  });
+
+  requestClient.post(
+    `${window._SERVER_API_}/bsanchor/sysApi/open/deleteToken`,
+    data,
+    {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  )
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   return {}
 } 

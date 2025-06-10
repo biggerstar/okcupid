@@ -1,15 +1,16 @@
+import { CAPCHA_SERVER_API } from '@/config';
 import { AppDataSource } from '@/orm/data-source';
 import { AppConfigEntity } from '@/orm/entities/app-config';
 import { CheckRecordEntity } from '@/orm/entities/check-record';
 import { QueueLiveEntity } from '@/orm/entities/queue-live';
 import { sleep } from '@/utils/time';
+import axios from 'axios';
 import { ipcMain } from 'electron';
 import md5 from 'md5';
 import { globalAppConfig } from '../global.app.config';
 import { request } from '../request-api/request';
 import { taskManager } from '../windows/task';
 import { updateAppConfig } from './tiktok';
-
 async function getMinutelyCounts(minuteAgo: number) {
   if (!Reflect.has(globalAppConfig, 'minFans') || !Reflect.has(globalAppConfig, 'anchorMinCoin')) {
     await sleep(300)
@@ -219,5 +220,16 @@ export function createTaskIpc() {
     }
     return data
   })
-
+  ipcMain.handle('capcha-solve', async (_, data) => {
+    return axios.request({
+      baseURL: CAPCHA_SERVER_API,
+      url: '/web/captcha/',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data
+    })
+      .then(res => res.data)
+  })
 }

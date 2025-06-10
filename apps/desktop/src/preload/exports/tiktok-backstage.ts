@@ -1,6 +1,7 @@
 import { whenDocumentElementStart } from "@/utils/dom";
 import { sleep } from "@/utils/time";
 import { ipcRenderer } from "electron";
+import { capchaSolve } from "../common/capcha";
 import { checkErrorPage } from "../common/check-error-page";
 import { useReload } from "../common/use-reload";
 
@@ -397,10 +398,13 @@ function createHookCss() {
   document.head.appendChild(styleEl)
 }
 
-
+let capchaSolving = false
 setInterval(async () => {
   if (hasCaptcha()) {
     updateCanCheckStatus(false)
+    if (capchaSolving) return
+    capchaSolving = true
+    capchaSolve().finally(() => setTimeout(() => capchaSolving = false, 10000))
   } else if (isInInvitePage() || inTakePage()) {
     const canCheck = await ipcRenderer.invoke('can-check-anchor')
     updateCanCheckStatus(canCheck)

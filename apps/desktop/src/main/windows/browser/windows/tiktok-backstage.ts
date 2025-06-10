@@ -1,7 +1,6 @@
 import { globalEnv } from "@/global/global-env";
 import { globalMainPathParser } from "@/global/global-main-path-parser";
 import { registerSchemesFingerprintBySession } from "@/main/interceptors";
-import { preventDevtools } from "@/main/interceptors/devtools/prevent-devtools";
 import { WebContentsView } from 'electron';
 import setCookieParser from "set-cookie-parser";
 import { mainWindow } from "../../app/app";
@@ -66,8 +65,8 @@ export class TiktokBackstageWindowManager {
     this.win.webContents.setAudioMuted(true)
     mainWindow.win.addListener('resize', () => this.fllowResize(isShow))
 
+    this.win.webContents.openDevTools()
     if (globalEnv.isDev) {
-      // this.win.webContents.openDevTools()
     }
 
     this.win.webContents.setWindowOpenHandler(({ url }) => {
@@ -105,7 +104,7 @@ export class TiktokBackstageWindowManager {
     })
 
     // other
-    preventDevtools(this.win.webContents.session)
+    // preventDevtools(this.win.webContents.session)
   }
 
   private _deleteHeaderValue(headers: Record<any, any> | Headers, headerName: string) {

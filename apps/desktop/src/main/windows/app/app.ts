@@ -22,6 +22,7 @@ export class MainWindow extends BaseApplication<BaseHashRouterBrowserWindow> {
       show: false,
       webPreferences: {
         sandbox: false,
+        webSecurity: false, 
       },
       autoShow: true,
       preloadCjsName: 'main',

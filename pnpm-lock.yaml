@@ -553,6 +553,9 @@ importers:
       '@changesets/cli':
         specifier: 'catalog:'
         version: 2.28.1
+      '@mdn/browser-compat-data':
+        specifier: ^6.0.19
+        version: 6.0.19
       '@playwright/test':
         specifier: 'catalog:'
         version: 1.51.0
@@ -3694,6 +3697,9 @@ packages:
     resolution: {integrity: sha512-llMXd39jtP0HpQLVI37Bf1m2ADlEb35GYSh1SDSLsBhR+5iCxiNGlT31yqbNtVHygHAtMy6dWFERpU2JgufhPg==}
     engines: {node: '>=18'}
     hasBin: true
+
+  '@mdn/browser-compat-data@6.0.19':
+    resolution: {integrity: sha512-P7e+M/HI9LKUEWIMkBzHY9RzsghjfLvz7an7maknAoaDlAjxj1Hnw8uTRyP5b5YAOMWZRaBDYJLDlsyfllP22A==}
 
   '@microsoft/api-extractor-model@7.29.6':
     resolution: {integrity: sha512-gC0KGtrZvxzf/Rt9oMYD2dHvtN/1KPEYsrQPyMKhLHnlVuO/f4AFN3E4toqZzD2pt4LhkKoYmL2H9tX3yCOyRw==}
@@ -13357,6 +13363,8 @@ snapshots:
     transitivePeerDependencies:
       - encoding
       - supports-color
+
+  '@mdn/browser-compat-data@6.0.19': {}
 
   '@microsoft/api-extractor-model@7.29.6(@types/node@22.13.13)':
     dependencies:

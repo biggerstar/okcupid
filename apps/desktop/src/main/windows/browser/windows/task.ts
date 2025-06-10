@@ -21,9 +21,9 @@ export function isLogined() {
 async function loopClearDatabase() {
   setInterval(async () => {
     try {
-      // 计算14天前的日期
+      // 计算x天前的日期, 定时清除旧的数据
       const someDaysAgo = new Date();
-      someDaysAgo.setDate(someDaysAgo.getDate() - 7);
+      someDaysAgo.setDate(someDaysAgo.getDate() - 3);
       // const someDaysAgo = new Date();
       // someDaysAgo.setHours(threeHoursAgo.getHours() - 3);
 
@@ -135,7 +135,11 @@ async function autoUploadBossData() {
     return uploadItem
   })
   console.log("上传老板 ID 列表: ", uploadData.map(i => i.bossId))
-  console.log("🚀 ~ autoUploadBossData ~ uploadData:", uploadData)
+  console.log("🚀 ~ autoUploadBossData ~ uploadData:", {
+    userId: globalAppConfig.userId,
+    token: globalAppConfig.token,
+    list: uploadData
+  })
   addBatchBoss({
     userId: globalAppConfig.userId,
     token: globalAppConfig.token,
