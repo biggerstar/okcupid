@@ -7,14 +7,14 @@ type DeepPartialPreferences = DeepPartial<Preferences>;
 const defaultConfig: DeepPartialPreferences = {
   logo: {
     enable: false,
-    source: ''
+    source: '',
   },
   app: {
     name: '',
     // layout: "sidebar-mixed-nav", 
     dynamicTitle: true,
     enableCheckUpdates: false,
-    enableRefreshToken: true,
+    enableRefreshToken: false,
     enablePreferences: false,
     authPageLayout: "panel-right",
     compact: false,

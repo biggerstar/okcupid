@@ -1,3 +1,3 @@
-export * from './app/app'
-export * from './browser'
+export * from './app/app';
+export * from './main';
 

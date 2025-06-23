@@ -29,7 +29,7 @@ export class MainWindow extends BaseApplication<BaseHashRouterBrowserWindow> {
     });
     this.win.webContents.setBackgroundThrottling(false)
     // this.win.gotoHashRouter({hash: '/'}).then();
-    this.win.gotoHashRouter({ hash: '/panel' }).then();
+    this.win.gotoHashRouter({ hash: '/taobao' }).then();
     console.log(os.arch(), process.arch);
     this.win.webContents.on('did-navigate-in-page', (_, url) => {
       const urlInfo = new URL(url);

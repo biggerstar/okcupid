@@ -24,8 +24,8 @@ export namespace AuthApi {
 export async function loginApi(form: any) {
   const data = await __API__.login(form)
   console.log("🚀 ~ loginApi ~ data:", data)
-  if (data?.code !== 200) {
-    message.error(data?.msg)
+  if (data?.code !== 0) {
+    message.error(data?.message)
     return
   }
 

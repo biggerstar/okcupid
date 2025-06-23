@@ -1,9 +1,7 @@
-import { globalCode } from "@/global/global-code";
 import { registerSchemesFingerprintBySession } from "@/main/interceptors";
 import { preventDevtools } from "@/main/interceptors/devtools/prevent-devtools";
 import { BaseHashRouterBrowserWindowOptions } from "@/main/interface";
 import { FingerPrintGenerator } from "@marketing/fingerprint-server";
-import * as cheerio from "cheerio";
 import { cloneDeep, merge } from 'lodash-es';
 import setCookieParser from "set-cookie-parser";
 import MIMEType from "whatwg-mimetype";
@@ -84,13 +82,6 @@ export class FingerPrintWebContentsView extends BaseHashRouterWebContentsView {
   async getUrlCookieString(url: string) {
     const cookies = await this.webContents.session.cookies.get({ url })
     return cookies.map(cookie => `${cookie.name}=${cookie.value}`).join(';')
-  }
-
-  private async _injectFingerPrint(html: string): Promise<string> {
-    const mouthId = "fp-inject-code"
-    const $ = cheerio.load(html || ``)
-    $('head').prepend(`\n<script id="${mouthId}"> ${await globalCode.fp(this.fingerprint)} </script>`);
-    return $.root().html()
   }
 
   private _allowCSP(response: Response) {

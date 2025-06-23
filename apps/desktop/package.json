@@ -1,7 +1,7 @@
 {
   "name": "@tiktok/process",
   "private": true,
-  "version": "0.0.2",
+  "version": "0.0.8",
   "main": "marketing/main/index.js",
   "description": "",
   "type": "commonjs",
@@ -21,7 +21,6 @@
     "@marketing/fingerprint-server": "workspace:*",
     "adm-zip": "^0.5.16",
     "bytenode": "^1.5.7",
-    "cheerio": "^1.0.0",
     "custom-electron-titlebar": "^4.2.8",
     "lodash-es": "^4.17.21",
     "md5": "^2.3.0",

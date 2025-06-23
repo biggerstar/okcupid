@@ -105,7 +105,11 @@
   "dependencies": {
     "@ant-design/icons-vue": "catalog:",
     "google-protobuf": "^3.21.4",
+    "http-mitm-proxy": "^1.1.0",
     "lodash-es": "catalog:",
-    "socket.io-client": "^4.8.1"
+    "querystring": "^0.2.1",
+    "socket.io-client": "^4.8.1",
+    "v-proxy": "^0.0.6",
+    "whistle": "^2.9.99"
   }
 }
