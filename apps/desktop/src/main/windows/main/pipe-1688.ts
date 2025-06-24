@@ -1,12 +1,22 @@
-import { ProductEntity } from '@/orm/entities/product'
-import * as cheerio from 'cheerio'
+import { ProductEntity } from '@/orm/entities/product';
+import { mainWindow } from '../app/app';
+
+function getScriptContent(base64) {
+  const html = new TextDecoder('utf-8').decode(Uint8Array.from(atob(base64), c => c.charCodeAt(0)));
+  const dom = new DOMParser().parseFromString(html, 'text/html')
+  const targetEl = Array.from(dom.querySelectorAll('script')).find(node => node.innerText.includes('(window.contextPath'))
+  return targetEl.innerText
+}
 
 export async function parse1688(searchKeyword = '', content: string) {
   if (!content) return
-  const $ = cheerio.load(content)
-  const scriptEls = $('script')
-  const coreScript = Array.from(scriptEls).find(node => $(node).text().includes('(window.contextPath'))
-  const func = new Function('window', $(coreScript).text());
+  const scriptContent = await mainWindow.win.webContents.executeJavaScript(`
+      const base64 = "${Buffer.from(content, 'utf8').toString('base64')}";
+      const func = ${getScriptContent.toString()};
+      func(base64);
+    `);
+  const scriptContentString = Buffer.from(scriptContent).toString('utf8')
+  const func = new Function('window', scriptContentString);
   const win: any = {};
   func(win);
   const serverResult = win.context?.result

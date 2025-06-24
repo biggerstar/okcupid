@@ -22,13 +22,13 @@ export default defineConfig(async (config: ConfigEnv): Promise<UserConfig> => {
     plugins: [
       await electron(createElectronConfig(config)),
       trackWatchPnpmSymlinks(),
-      multipleViteLibLoader({
-        fromDir: 'src/scripts-js/exports',
-        toDir: 'marketing/scripts-js',
-        watchDir: 'src/scripts-js',
-        minify: true,
-        resolveAlias: { '@': path.resolve(__dirname, 'src') }
-      }),
+      // multipleViteLibLoader({
+      //   fromDir: 'src/scripts-js/exports',
+      //   toDir: 'marketing/scripts-js',
+      //   watchDir: 'src/scripts-js',
+      //   minify: true,
+      //   resolveAlias: { '@': path.resolve(__dirname, 'src') }
+      // }),
       multipleViteLibLoader({
         fromDir: 'src/preload/exports',
         toDir: 'marketing/preload',

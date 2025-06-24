@@ -17,7 +17,6 @@
     "pack:linux": "pnpm -w run build && electron-builder --linux"
   },
   "dependencies": {
-    "cheerio": "^1.1.0",
     "custom-electron-titlebar": "^4.2.8",
     "exit-hook": "^4.0.0",
     "iconv-lite": "^0.6.3",

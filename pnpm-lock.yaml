@@ -689,7 +689,7 @@ importers:
   apps/desktop:
     dependencies:
       cheerio:
-        specifier: ^1.1.0
+        specifier: ^1.0.0
         version: 1.1.0
       custom-electron-titlebar:
         specifier: ^4.2.8
