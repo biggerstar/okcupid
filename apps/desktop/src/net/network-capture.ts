@@ -1,5 +1,6 @@
 import { globalMainPathParser } from '@/global/global-main-path-parser';
 import { fork } from 'child_process';
+import { dialog } from 'electron';
 import path from 'path';
 import proxy from 'set-global-proxy';
 import { fileURLToPath } from 'url';
@@ -74,6 +75,7 @@ export class NetworkCapture {
       });
     } catch (error) {
       console.error('启动代理服务失败:', error);
+      dialog.showErrorBox('启动代理服务失败', error?.message || '')
       await this._cleanup();
       throw error;
     }
@@ -144,7 +146,7 @@ export class NetworkCapture {
             ...record,
             ...item,
           }))
-          urlMap.delete(item.id)
+          // urlMap.delete(item.id)
         })
       }
       // 移除 三分钟前的映射
