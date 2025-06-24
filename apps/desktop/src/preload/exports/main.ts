@@ -9,7 +9,7 @@ useTitlebar({
   overflowHidden: true,
   titleSuffix: {
     suffix: ` FLJ内部使用-淘宝1688爬取信息`,
-    showVersion: true,
+    showVersion: false,
     separator: ' - ',
   }
 })

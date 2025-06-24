@@ -1,8 +1,8 @@
 import { ProductEntity } from '@/orm/entities/product';
 import { mainWindow } from '../app/app';
 
-function getScriptContent(base64) {
-  const html = new TextDecoder('utf-8').decode(Uint8Array.from(atob(base64), c => c.charCodeAt(0)));
+function getScriptContent(b64) {
+  const html = new TextDecoder('utf-8').decode(Uint8Array.from(atob(b64), c => c.charCodeAt(0)));
   const dom = new DOMParser().parseFromString(html, 'text/html')
   const targetEl = Array.from(dom.querySelectorAll('script')).find(node => node.innerText.includes('(window.contextPath'))
   return targetEl.innerText
@@ -11,12 +11,16 @@ function getScriptContent(base64) {
 export async function parse1688(searchKeyword = '', content: string) {
   if (!content) return
   const scriptContent = await mainWindow.win.webContents.executeJavaScript(`
-      const base64 = "${Buffer.from(content, 'utf8').toString('base64')}";
-      const func = ${getScriptContent.toString()};
-      func(base64);
+    (()=> {
+      var base64 = "${Buffer.from(content, 'utf8').toString('base64')}";
+        var func = ${getScriptContent.toString()};
+        var result = func(base64);
+        delete base64;
+        delete func;
+        return result;
+    })()
     `);
-  const scriptContentString = Buffer.from(scriptContent).toString('utf8')
-  const func = new Function('window', scriptContentString);
+  const func = new Function('window', scriptContent);
   const win: any = {};
   func(win);
   const serverResult = win.context?.result

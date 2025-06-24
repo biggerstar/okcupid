@@ -34,7 +34,7 @@
     "@marketing/vite-plugin": "workspace:*",
     "@types/md5": "^2.3.5",
     "electron": "catalog:",
-    "electron-builder": "catalog:",
+    "electron-builder": "^26.0.12",
     "rimraf": "catalog:",
     "rollup-plugin-copy": "catalog:",
     "vite-plugin-electron": "catalog:",

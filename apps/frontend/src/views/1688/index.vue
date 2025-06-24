@@ -142,7 +142,7 @@ onUnmounted(() => {
 </script>
 <template>
   <Page auto-content-height>
-    <Grid :table-title="'淘宝选品'">
+    <Grid :table-title="'1688选品'">
       <template #display_id="{ row }">
         <Button type="link" target="_blank" :href="row['detailUrl']">{{ row['title'] }}</Button>
       </template>
