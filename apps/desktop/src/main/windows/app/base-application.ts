@@ -33,7 +33,8 @@ export abstract class BaseApplication<WindowType extends BrowserWindow> {
     app.on('window-all-closed', () => {
       this.win = null;
       networkCapture.stop()
-      if (process.platform !== 'darwin') app.quit();
+      // if (process.platform !== 'darwin') 
+      app.quit();
     });
 
     app.on('before-quit', () => {
