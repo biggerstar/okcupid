@@ -8,18 +8,42 @@ import { Page } from '@vben/common-ui';
 
 import { Button } from 'ant-design-vue';
 
+import { useVbenForm } from '#/adapter/form';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-
-import Api from '#/api';
 import type { CompanyUserApi } from '#/api/company/user';
-import { useColumns, useGridFormSchema } from './data';
+import { useVbenModal } from '@vben/common-ui';
+import { onMounted, onUnmounted } from 'vue';
+import { useColumns, useGridFormSchema, useSettingFrom } from './data';
+
+const [settingModal, modalApi] = useVbenModal({
+  onOpened() {
+    const stockLimit = localStorage.getItem('stockLimit')
+    if (stockLimit) {
+      formApi.setValues({ stockLimit })
+    }
+  },
+  async onConfirm() {
+    const values = await formApi.getValues()
+    if (values.stockLimit) {
+      localStorage.setItem('stockLimit', values.stockLimit)
+    }
+    gridApi.query()
+    modalApi.close()
+  }
+});
+const [settingForm, formApi] = useVbenForm({
+  showDefaultActions: false,
+  schema: useSettingFrom()
+})
 
 const [Grid, gridApi] = useVbenVxeGrid({
   showSearchForm: false,
   formOptions: {
     schema: useGridFormSchema(),
+    compact: true,
     submitOnChange: true,
     showCollapseButton: false,
+    // wrapperClass: "grid-cols-5",
   },
   gridOptions: {
     columns: useColumns(),
@@ -31,8 +55,8 @@ const [Grid, gridApi] = useVbenVxeGrid({
       gt: 0
     },
     pagerConfig: {
-      pageSize: 50,
-      pageSizes: [50, 200, 500, 2000, 5000, 10000, 50000, 100000, 200000, 500000, 1000000]
+      pageSize: 2000,
+      pageSizes: [50, 200, 500, 2000, 5000]
     },
     checkboxConfig: {
       range: true
@@ -43,14 +67,14 @@ const [Grid, gridApi] = useVbenVxeGrid({
     proxyConfig: {
       ajax: {
         query: async ({ page }, formValues) => {
-          // console.log("🚀 ~ query: ~ page:", page, formValues)
-          const res = await Api.electron.boss.getBossList({
-            page: page.currentPage,
+          const result = await __API__.getPruductList({
+            where: { type: '1688' },
             pageSize: page.pageSize,
-            ...formValues,
-          });
-          console.log("🚀 ~ query: ~ res:", res)
-          return res
+            currentPage: page.currentPage,
+            ...formValues
+          })
+          console.log(`🚀 ~ query: ~ result:`, result)
+          return result.data
         },
       },
     },
@@ -64,43 +88,86 @@ const [Grid, gridApi] = useVbenVxeGrid({
   } as VxeTableGridOptions<CompanyUserApi.User>,
 });
 
-function getTikTokLiveUrl (user_unionid: string, isLive: boolean = false){
-  let url =''
-  if (isLive) {
-      url =  `https://www.tiktok.com/@${user_unionid}/live`
-    }else{
-      url =  `https://www.tiktok.com/@${user_unionid}`
-  }
-  return url
+function parseColor(row: any) {
+  const skuList = row.skuList
+  return [...new Set(skuList.map((item: any) => item.specAttrs.split(';')[0]))].join('\n')
+}
+
+function parseSize(row: any) {
+  const skuList = row.skuList
+  return [...new Set(skuList.map((item: any) => item.specAttrs.split(';')[1]))].join('\n')
+}
+
+function parsePresale(row: any){
+  return row.title.includes('预售') ? '是' : ''
+}
+
+function parseLimit(row: any): string {
+  const skuList = row.skuList
+  const specList: string[] = []
+  const stockLimit = localStorage.getItem('stockLimit')
+  if (!stockLimit) return ''
+  skuList.forEach((item: any) => {
+    const canBookCount = item.canBookCount
+    if (stockLimit <= canBookCount) return
+    specList.push(item.specAttrs)
+  })
+  return specList.join('\n')
 }
 
 function deleteRows() {
   const grid = gridApi.grid
   const selecterRecord = grid.getCheckboxRecords()
-  console.log("🚀 ~ deleteRows ~ selecterRecord:", selecterRecord)
   const deleteIds = selecterRecord.map(item => item.id)
-  __TABLE_API__.deleteBossList(deleteIds)
+  __API__.deleteProduct(deleteIds)
   gridApi.reload()
 }
+
+let curTotal = -1
+let loopUpdateTimer: any
+onMounted(() => {
+  loopUpdateTimer = setInterval(async() => {
+    const productList = await __API__.getPruductList({ where: { type: '1688' }})
+    if (curTotal !== productList.data.total) {
+      if (curTotal >= 0) gridApi.reload()
+      curTotal = productList.data.total
+    }
+  }, 500)
+})
+
+onUnmounted(() => {
+  clearInterval(loopUpdateTimer)
+})
 
 </script>
 <template>
   <Page auto-content-height>
-    <Grid :table-title="'老板列表'">
-      <template #display_name="{ row }">
-        <Button type="link" target="_blank" :href="getTikTokLiveUrl(row['display_name'], false)">
-          {{ row['display_name'] }}
-        </Button>
+    <Grid :table-title="'淘宝选品'">
+      <template #display_id="{ row }">
+        <Button type="link" target="_blank" :href="row['detailUrl']">{{ row['title'] }}</Button>
       </template>
-      <template #from_live_display_name="{ row }">
-        <Button type="link" target="_blank" :href="getTikTokLiveUrl(row['from_live_display_name'], true )">
-          {{ row['from_live_display_name'] }}
-        </Button>
+      <template #color="{ row }">
+        <div>{{ parseColor(row) }}</div>
+      </template>
+      <template #size="{ row }">
+        <div>{{ parseSize(row) }}</div>
+      </template>
+      <template #presale="{ row }">
+        <div>{{ parsePresale(row) }}</div>
+      </template>
+      <template #limit="{ row }">
+        <div>{{ parseLimit(row) }}</div>
       </template>
       <template #toolbar-tools>
         <Button class="mr-2" type="primary" danger @click="deleteRows()">
           删除
         </Button>
+        <Button class="mr-2" type="primary" @click="() => modalApi.open()">
+          配置
+        </Button>
+        <settingModal class="w-[600px]" title="配置">
+          <settingForm></settingForm>
+        </settingModal>
       </template>
     </Grid>
   </Page>

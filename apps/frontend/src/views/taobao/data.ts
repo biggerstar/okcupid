@@ -13,6 +13,19 @@ const formatTimeField = (time: string | null): string => {
   }
 };
 
+export function useSettingFrom(): VbenFormSchema[] {
+  return [
+    {
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入最高配送天数',
+      },
+      fieldName: 'deliveryDay',
+      label: '配送天数',
+    },
+  ]
+}
+
 export function useGridFormSchema(): VbenFormSchema[] {
   return [
     {
@@ -51,83 +64,65 @@ export function useColumns(): VxeTableGridOptions['columns'] {
     {
       field: 'index',
       title: '序号',
-      width: 80,
+      width: 60,
     },
     {
-      field: 'display_id',
-      title: '主播ID',
-      width: 150,
+      field: 'keyword',
+      title: '搜索词',
+      width: 110,
+    },
+    {
+      field: 'detailUrl',
+      title: '来源 URL',
+      width: 160,
+      visible: false,
+    },
+    {
+      field: 'title',
+      title: '标题',
+      minWidth: 260,
       sortable: true,
       slots: {
         default: 'display_id'
       },
     },
-    // {
-    //   field: 'nickname',
-    //   title: $t('system.user.nickname'),
-    //   width: 160,
-    // },
     {
-      field: 'region',
-      title: '区域',
-      sortable: true,
-      width: 60,
+      field: 'color',
+      title: '颜色',
+      minWidth: 260,
+      slots: {
+        default: 'color'
+      },
     },
     {
-      field: 'data_from',
-      width: 60,
-      title: '来源',
-      sortable: true,
+      field: 'size',
+      title: '尺码',
+      minWidth: 260,
+      slots: {
+        default: 'size'
+      },
     },
     {
-      field: 'coin',
-      title: '金币',
-      width: 80,
-      sortable: true,
+      field: 'presale',
+      title: '发货时间',
+      minWidth: 80,
+      slots: {
+        default: 'presale'
+      },
     },
     {
-      field: 'tow_week_coins',
-      title: '两周金币',
-      width: 100,
-      sortable: true,
-    },
-    {
-      field: 'fans',
-      title: '粉丝',
-      width: 70,
-      sortable: true,
-    },
-    {
-      field: 'follow',
-      title: '关注',
-      width: 70,
-      sortable: true,
-    },
-    {
-      field: 'audience_count',
-      title: '观众',
-      width: 70,
-      sortable: true,
-    },
-    {
-      field: 'live_type',
-      title: '类型',
-      width: 70,
-      sortable: true,
-    },
-    // {
-    //   field: 'tags',
-    //   title: '标签',
-    // },
-    {
-      field: 'check_result',
-      title: '查验结果',
-      sortable: true,
+      field: 'limit',
+      title: '限购',
+      minWidth: 220,
+      slots: {
+        default: 'limit'
+      },
     },
     {
       field: 'created_time',
       title: '创建时间',
       width: 120,
+      visible: false,
       sortable: true,
       formatter: ({ cellValue }) => formatTimeField(cellValue),
     },
@@ -135,21 +130,6 @@ export function useColumns(): VxeTableGridOptions['columns'] {
       field: 'updated_time',
       title: '更新时间',
       visible: false,
-      sortable: true,
-      width: 120,
-      formatter: ({ cellValue }) => formatTimeField(cellValue),
-    },
-    {
-      field: 'upload_time',
-      title: '上传时间',
-      visible: false,
-      sortable: true,
-      width: 120,
-      formatter: ({ cellValue }) => formatTimeField(cellValue),
-    },
-    {
-      field: 'check_time',
-      title: '查验时间',
       sortable: true,
       width: 120,
       formatter: ({ cellValue }) => formatTimeField(cellValue),

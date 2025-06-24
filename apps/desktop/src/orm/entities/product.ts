@@ -1,24 +1,27 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from "typeorm"
 
 @Entity()
-export class TopBossUserEntity extends BaseEntity {
+export class ProductEntity extends BaseEntity {
   @PrimaryColumn({ type: 'varchar' })
   id: string
 
   @Column({ type: 'varchar' })
-  display_name: string
+  type: string
 
   @Column({ type: 'varchar' })
-  nickname: string
-
-  @Column({ type: 'varchar' })
-  from_live_display_name: string
-
-  @Column({ type: 'integer', default: 0 })
-  fan_ticket: string
+  title: string
 
   @Column({ type: 'varchar', nullable: true })
-  upload_time?: string
+  keyword: string
+
+  @Column({ type: 'varchar' })
+  detailUrl: string
+
+  @Column({ type: 'int' })
+  deliveryDay: number
+
+  @Column({ type: 'json' })
+  skuList: Record<any, any>
 
   @CreateDateColumn()
   created_time: Date

@@ -15,8 +15,14 @@ useTitlebar({
 })
 
 const __API__ = {
-  login(options = {}) {
+  async login(options = {}) {
     return ipcRenderer.invoke('login', options)
+  },
+  async getPruductList(options = {}) {
+    return ipcRenderer.invoke('get-product-data', options)
+  },
+  async deleteProduct(ids = {}) {
+    return ipcRenderer.invoke('delete-product', ids)
   }
 }
 contextBridge.exposeInMainWorld('__API__', __API__)

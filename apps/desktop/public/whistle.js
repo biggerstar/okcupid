@@ -1,4 +1,4 @@
-import whistle from 'whistle';
+const whistle = require('whistle')
 
 const port = parseInt(process.env.PORT || '12306');
 const localhost = process.env.LOCALHOST || '127.0.0.1';

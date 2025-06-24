@@ -7,11 +7,24 @@ import dayjs from 'dayjs';
 const formatTimeField = (time: string | null): string => {
   if (!time) return '';
   try {
-    return dayjs(time).format('MM-DD HH:mm:ss');
+    return dayjs(+time).subtract(8, 'hour').format('MM-DD HH:mm:ss');
   } catch (error) {
     return time || '';
   }
 };
+
+export function useSettingFrom(): VbenFormSchema[] {
+  return [
+    {
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入库存不足阈值',
+      },
+      fieldName: 'stockLimit',
+      label: '库存不足阈值',
+    },
+  ]
+}
 
 export function useGridFormSchema(): VbenFormSchema[] {
   return [
@@ -30,12 +43,13 @@ export function useGridFormSchema(): VbenFormSchema[] {
       componentProps: {
         allowClear: true,
         options: [
-          { label: $t('ui.form.enabled'), value: 1 },
-          { label: $t('ui.form.disabled'), value: 0 },
+          { label: '广场', value: '广场' },
+          { label: '推荐', value: '推荐' },
+          { label: '热门', value: '热门' },
         ],
       },
       fieldName: 'status',
-      label: $t('system.user.status'),
+      label: '来源',
     },
   ];
 }
@@ -50,47 +64,74 @@ export function useColumns(): VxeTableGridOptions['columns'] {
     {
       field: 'index',
       title: '序号',
-      width: 80,
+      width: 60,
     },
     {
-      field: 'display_name',
-      title: '老板ID',
+      field: 'keyword',
+      title: '搜索词',
+      width: 110,
+    },
+    {
+      field: 'detailUrl',
+      title: '来源 URL',
       width: 160,
+      visible: false,
+    },
+    {
+      field: 'title',
+      title: '标题',
+      minWidth: 260,
       sortable: true,
       slots: {
-        default: 'display_name'
+        default: 'display_id'
       },
     },
     {
-      field: 'from_live_display_name',
-      title: '来自直播间',
-      sortable: true,
+      field: 'color',
+      title: '颜色',
+      minWidth: 260,
       slots: {
-        default: 'from_live_display_name'
+        default: 'color'
       },
     },
     {
-      field: 'nickname',
-      title: '昵称',
-      sortable: true,
+      field: 'size',
+      title: '尺码',
+      minWidth: 260,
+      slots: {
+        default: 'size'
+      },
     },
     {
-      field: 'fan_ticket',
-      title: '金币',
-      sortable: true,
-      width: 120,
+      field: 'presale',
+      title: '是否预售',
+      minWidth: 80,
+      slots: {
+        default: 'presale'
+      },
+    },
+    {
+      field: 'limit',
+      title: '库存不足',
+      minWidth: 220,
+      slots: {
+        default: 'limit'
+      },
     },
     {
       field: 'created_time',
       title: '创建时间',
+      width: 120,
+      visible: false,
       sortable: true,
       formatter: ({ cellValue }) => formatTimeField(cellValue),
     },
     {
       field: 'updated_time',
       title: '更新时间',
-      sortable: true,
       visible: false,
+      sortable: true,
+      width: 120,
       formatter: ({ cellValue }) => formatTimeField(cellValue),
     },
   ];

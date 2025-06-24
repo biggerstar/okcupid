@@ -25,7 +25,7 @@ export class MainWindow extends BaseApplication<BaseHashRouterBrowserWindow> {
         webSecurity: false, 
       },
       autoShow: true,
-      preloadCjsName: 'main',
+      // preloadCjsName: 'main',
     });
     this.win.webContents.setBackgroundThrottling(false)
     // this.win.gotoHashRouter({hash: '/'}).then();

@@ -1,4 +1,6 @@
+import { globalMainPathParser } from '@/global/global-main-path-parser';
 import { fork } from 'child_process';
+import exitHookPkg from 'exit-hook';
 import path from 'path';
 import proxy from 'set-global-proxy';
 import { fileURLToPath } from 'url';
@@ -19,16 +21,18 @@ export class NetworkCapture {
   private lastRowId: string;
   public port: number;
   public host: string;
-  public loopInterval: number = 1000;
-  public onResponseList: Function[] = [];
-  public onResponseItemList: Function[] = [];
+  public loopInterval: number = 500;
+  private onResponseList: Function[] = [];
+  private onResponseItemList: Function[] = [];
+  private _nextNewIds = []
+  private _requestIdList = [];
   public constructor() {
     // 确保进程退出时清理资源
     process.on('exit', this._cleanup.bind(this));
     process.on('SIGINT', this._cleanup.bind(this));
     process.on('SIGTERM', this._cleanup.bind(this));
-    this.clientId = `${Date.now()}-1`;
-    this.lastRowId = `${Date.now()}-1`;
+    this.clientId = `${Date.now()}-100`;
+    this.lastRowId = `${Date.now()}-0`;
   }
 
   public async start(options: { port?: number, host?: string } = {}) {
@@ -39,8 +43,9 @@ export class NetworkCapture {
       return;
     }
     try {
-      // 启动whistle代理服务子进程
-      this._childProcess = fork(path.join(__dirname, 'whistle.js'), {
+      // 启动whistle代理服务子进程 
+      // @ts-ignore
+      this._childProcess = fork(globalMainPathParser.resolveAppRoot('whistle.js').toString(), {
         stdio: 'inherit',
         env: {
           PORT: this.port.toString(),
@@ -52,7 +57,7 @@ export class NetworkCapture {
       this._proxyEnabled = await proxy.enableProxy({
         host: this.host,
         port: this.port,
-        sudo: true,
+        sudo: false,
       });
 
       this._running = true;
@@ -66,7 +71,6 @@ export class NetworkCapture {
         if (code !== 0) {
           console.error(`代理服务异常退出，代码: ${code}`);
         }
-        this._running = false;
         this._childProcess = null;
       });
     } catch (error) {
@@ -77,20 +81,13 @@ export class NetworkCapture {
   }
 
   public async stop() {
-    if (!this._running) {
-      console.log('代理服务未运行');
-      return;
-    }
+    proxy.disableProxy(false);
     clearInterval(this._loopFetchResponseTimer);
     this.clearEvent();
 
     try {
       // 关闭全局代理
-      if (this._proxyEnabled) {
-        await proxy.disableProxy(true);
-        console.log('已关闭全局代理设置');
-        this._proxyEnabled = false;
-      }
+      this._proxyEnabled = false;
 
       // 停止子进程
       if (this._childProcess) {
@@ -108,7 +105,6 @@ export class NetworkCapture {
         this._childProcess = null;
       }
       this._running = false;
-      throw error;
     }
   }
 
@@ -130,28 +126,49 @@ export class NetworkCapture {
   }
 
   private _loopFetchResponse() {
+    const urlMap = new Map()
     this._loopFetchResponseTimer = setInterval(async () => {
-      const res = await this.fetchResponse();
-      this.onResponseList.forEach((func) => func(res));
-      const dataList = Object.values(res.data?.data || [])
-      dataList.forEach(item => {
-        this.onResponseItemList.forEach((func) => func(item));
+      let res
+      try {
+        res = await this.fetchResponse();
+      } catch (_e) { }
+      if (res) {
+        this.onResponseList.forEach((func) => func(res));
+        const dataList = Object.values(res.data?.data || {})
+        dataList.forEach((item: Record<any, any>) => {
+          if (item.url) {
+            urlMap.set(item.id, { url: item.url, startTime: item.url })
+            return
+          }
+          const record = urlMap.get(item.id) || {}
+          this.onResponseItemList.forEach((func) => func({
+            ...record,
+            ...item,
+          }))
+          urlMap.delete(item.id)
+        })
+      }
+      // 移除 三分钟前的映射
+      urlMap.forEach((val, key) => {
+        if (val.startTime + (1000 * 5 * 60) <= Date.now()) {
+          urlMap.delete(key)
+        }
       })
     }, this.loopInterval);
   }
 
-  async fetchResponse() {
+  public async fetchResponse() {
     if (!this.isRunning) return null;
     const baseUrl = `http://${this.host}:${this.port}/cgi-bin/get-data`;
     const queryParams = new URLSearchParams(<any>{
       clientId: this.clientId,
       startLogTime: '-2',
       startSvrLogTime: '-2',
-      ids: '',
-      status: '',
+      ids: this._nextNewIds.join(','),
+      status: this._nextNewIds.map(() => '0-0').join(','),
       startTime: this.lastRowId,
-      dumpCount: '0',
       lastRowId: this.lastRowId,
+      dumpCount: '0',
       logId: '',
       count: '20',
       _: Date.now(),
@@ -164,6 +181,7 @@ export class NetworkCapture {
       });
       const res = await response.json();
       if (res.data?.lastId) this.lastRowId = res.data?.lastId
+      this._nextNewIds = res.data?.newIds || []
       return res;
     } catch (error) {
       console.error('Fetch error:', error.message);
@@ -171,15 +189,21 @@ export class NetworkCapture {
     }
   }
   // 监控每次轮询结果请求
-  onResponse(callback) {
+  public onResponse(callback) {
     this.onResponseList.push(callback);
   }
   // 监控每次轮询结果请求回来，获取到的请求抓包 item request & item response
-  onResponseItem(callback) {
+  public onResponseItem(callback) {
     this.onResponseItemList.push(callback);
   }
-  clearEvent() {
+  public clearEvent() {
     this.onResponseList = [];
     this.onResponseItemList = [];
   }
 }
+
+exitHookPkg['default'](() => {
+  networkCapture.stop()
+})
+
+export const networkCapture = new NetworkCapture()

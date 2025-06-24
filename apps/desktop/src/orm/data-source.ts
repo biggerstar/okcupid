@@ -2,9 +2,7 @@ import { globalMainPathParser } from "@/global/global-main-path-parser";
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { AppConfigEntity } from "./entities/app-config";
-import { CheckRecordEntity } from "./entities/check-record";
-import { QueueLiveEntity } from "./entities/queue-live";
-import { TopBossUserEntity } from "./entities/top-boss-user";
+import { ProductEntity } from "./entities/product";
 
 const dbName = process.cwd().split('/').splice(2).join('').replaceAll('-', '')
 console.log("🚀 ~ dbName:", globalMainPathParser.resolveDB(dbName))
@@ -21,9 +19,7 @@ export const AppDataSource = new DataSource({
   },
   entities: [
     AppConfigEntity,
-    QueueLiveEntity,
-    TopBossUserEntity,
-    CheckRecordEntity,
+    ProductEntity,
   ], // 注册实体
   // 或者使用通配符匹配所有实体文件
   // entities: ["src/entity/**/*.ts"],

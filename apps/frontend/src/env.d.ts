@@ -10,25 +10,8 @@ declare global {
 
   declare const __API__: {
     login(form: any): Promise<any>
-    startTask(): void
-    stopTask(): void
-    openTikTokWindow(): void
-    hideTikTokWindow(): void
-    openTiktokBackstageWindow(): void
-    hideTiktokBackstageWindow(): void
-    resetCheckCounter(): Promise<void>
-    getMinutelyCounts(): Promise<Record<any, any>>
-    getDayCountsInfo(): Promise<Record<any, any>>
-    getCheckedCountInfo(): Promise<Record<any, any>>
-    getCurrentStat(): Promise<Record<any, any>>
-    getTiktokWindowRunningStatus(): Promise<boolean>
-    getTiktokBackstageWindowRunningStatus(): Promise<boolean>
-    taskRunningStatus(): Promise<boolean>
-    getTiktokWindowShowStatus(): Promise<boolean>
-    getTiktokBackstageWindowShowStatus(): Promise<boolean>
-    getAppConfig(): Promise<Record<any, any>>
-    isLogined(): Promise<boolean>
-    updateAppConfig(config: Record<any, any>): Promise<Record<any, any>>
+    getPruductList(options?: any): Promise<any>
+    deleteProduct(ids?: string[]): Promise<any>
   }
 
   declare const __TABLE_API__: {

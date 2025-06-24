@@ -1,5 +1,5 @@
 {
-  "name": "@tiktok/process",
+  "name": "econmerce-crawler",
   "private": true,
   "version": "0.0.8",
   "main": "marketing/main/index.js",
@@ -17,28 +17,23 @@
     "pack:linux": "pnpm -w run build && electron-builder --linux"
   },
   "dependencies": {
-    "@marketing/fingerprint-client": "workspace:*",
-    "@marketing/fingerprint-server": "workspace:*",
-    "adm-zip": "^0.5.16",
-    "bytenode": "^1.5.7",
+    "cheerio": "^1.1.0",
     "custom-electron-titlebar": "^4.2.8",
-    "lodash-es": "^4.17.21",
+    "exit-hook": "^4.0.0",
+    "iconv-lite": "^0.6.3",
     "md5": "^2.3.0",
-    "mime": "^4.0.7",
     "original-fs": "^1.2.0",
-    "p-queue": "^8.1.0",
     "reflect-metadata": "^0.2.2",
     "set-cookie-parser": "^2.7.1",
+    "set-global-proxy": "^0.2.4",
     "sqlite3": "^5.1.2",
     "typeorm": "0.3.17",
-    "whatwg-mimetype": "^4.0.0",
-    "yaml": "^2.7.1"
+    "whistle": "^2.9.99"
   },
   "devDependencies": {
     "@marketing/frontend": "workspace:*",
     "@marketing/vite-plugin": "workspace:*",
     "@types/md5": "^2.3.5",
-    "@types/whatwg-mimetype": "^3.0.2",
     "electron": "catalog:",
     "electron-builder": "catalog:",
     "rimraf": "catalog:",

@@ -1,2 +1,2 @@
-export * from './window/base'
-export * from './window/expand'
+export * from './window/base';
+

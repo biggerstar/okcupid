@@ -121,10 +121,10 @@ watch(
       <div class="text-center h-[20px]">2222222222222</div>
     </template> -->
     <template #aside-header>
-      <div class="flex flex-col justify-center items-center h-[80px]">
+      <!-- <div class="flex flex-col justify-center items-center h-[80px]">
         <UserDropdown :avatar :menus :text="userStore.userInfo?.username" description="" tag-text="Pro" side="right"
           @logout="handleLogout" />
-      </div>
+      </div> -->
     </template>
   </BasicLayout>
 </template>

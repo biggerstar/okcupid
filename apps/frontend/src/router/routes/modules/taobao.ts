@@ -6,7 +6,7 @@ const routes: RouteRecordRaw[] = [
     meta: {
       icon: 'material-symbols:contextual-token-outline-rounded',
       order: 5,
-      title: "分析",
+      title: "淘宝",
       hideChildrenInMenu: true,
       keepAlive: true,
     },

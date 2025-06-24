@@ -1,12 +1,7 @@
+import { ProductEntity } from "@/orm/entities/product";
 import { ipcMain } from "electron";
 import md5 from 'md5';
-
-const AC = [
-  {
-    u: 'test',
-    p: 'e10adc3949ba59abbe56e057f20f883e'
-  }
-]
+import { AC } from "./users";
 
 ipcMain.handle('login', (_ev, options: Record<any, any> = {}) => {
   const { password, username } = options
@@ -26,8 +21,30 @@ ipcMain.handle('login', (_ev, options: Record<any, any> = {}) => {
   } else {
     return {
       code: 1,
-      message: '登录失败'
+      message: '登录失败, 你的 IP 已经被记录'
     }
   }
 })
 
+ipcMain.handle('get-product-data', async (_ev, options = {}) => {
+  const startIndex = options.pageSize && options.pageSize ? options.pageSize * (options.currentPage - 1) : 0
+  const [result, count] = await ProductEntity.findAndCount({
+    where: options.where,
+    take: options.pageSize || 50,
+    skip: startIndex ?? 0
+  })
+  result.forEach((item: any, index) => {
+    item.index = startIndex + index + 1
+  })
+  return {
+    code: 0,
+    data: {
+      items: result,
+      total: count
+    }
+  }
+})
+
+ipcMain.handle('delete-product', (_ev: any, ids: string[]) => {
+  ProductEntity.delete(ids)
+})

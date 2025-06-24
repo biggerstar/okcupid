@@ -1,7 +1,5 @@
 /// <reference types="vite-plugin-electron/electron-env" />
 
-import type { FingerPrintGenerator } from "@marketing/fingerprint-server";
-
 declare namespace NodeJS {
   interface ProcessEnv {
     VSCODE_DEBUG?: 'true';
@@ -32,7 +30,6 @@ declare namespace NodeJS {
 
 declare global {
   declare const ELECTRON_DEV_SERVER_URL: string;
-  declare const $FP: FingerPrintGenerator;
   interface Window {
     __socket__: any
     __require__: any

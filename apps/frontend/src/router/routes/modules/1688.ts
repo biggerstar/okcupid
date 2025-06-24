@@ -6,7 +6,7 @@ const routes: RouteRecordRaw[] = [
     meta: {
       icon: 'mdi:user-online-outline',
       order: 8,
-      title: "老板",
+      title: "1688",
       hideChildrenInMenu: true,
       keepAlive: true,
     },
