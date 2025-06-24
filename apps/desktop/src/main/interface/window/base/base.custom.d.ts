@@ -1,6 +1,6 @@
 import { BrowserWindowConstructorOptions, WebContentsViewConstructorOptions } from "electron";
 
-type PreloadName = 'main' | 'fp' | 'tiktok' | 'tiktok-backstage' | 'tiktok-backstage-fetch'
+type PreloadName = 'main' 
 
 interface CommonCustomOptions {
   /**

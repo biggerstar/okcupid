@@ -9,7 +9,7 @@
     "dev:nest-admin:docker": "pnpm -F nest-admin run docker:build:dev",
     "dev:nest-admin": "pnpm -F nest-admin run dev",
     "dev:frontend": "pnpm -F frontend run dev",
-    "dev:desktop": "pnpm -F @tiktok/process run dev",
+    "dev:desktop": "pnpm -F econmerce-crawler run dev",
     "dev:extensions": "pnpm -F @extensions/fingerprint run dev",
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 turbo build --force",
     "build:web:analyze": "turbo build:analyze",

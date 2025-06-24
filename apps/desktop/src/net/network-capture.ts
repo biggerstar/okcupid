@@ -1,6 +1,5 @@
 import { globalMainPathParser } from '@/global/global-main-path-parser';
 import { fork } from 'child_process';
-import exitHookPkg from 'exit-hook';
 import path from 'path';
 import proxy from 'set-global-proxy';
 import { fileURLToPath } from 'url';
@@ -201,9 +200,5 @@ export class NetworkCapture {
     this.onResponseItemList = [];
   }
 }
-
-exitHookPkg['default'](() => {
-  networkCapture.stop()
-})
 
 export const networkCapture = new NetworkCapture()
