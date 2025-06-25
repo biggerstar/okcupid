@@ -110,7 +110,7 @@ function parseLimit(row: any): string {
   skuList.forEach((item: any) => {
     const canBookCount = item.canBookCount
     if (stockLimit <= canBookCount) return
-    specList.push(item.specAttrs)
+    specList.push(`${item.specAttrs} - 库存 ${item.canBookCount}`)
   })
   return specList.join('\n')
 }

@@ -11,6 +11,7 @@ networkCapture.onResponseItem((item: Record<any, any> = {}) => {
   const { reqError, res, url } = item as Record<string, any>
   if (reqError || !url) return
   if (!res.size) return
+
   const content = res.base64 ? Buffer.from(res.base64, 'base64').toString('utf8') : ''
 
   if (url.includes('https://s.taobao.com/search?')) {

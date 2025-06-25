@@ -19,6 +19,7 @@
   "dependencies": {
     "@xcodebuild/global-proxy": "^0.0.6",
     "custom-electron-titlebar": "^4.2.8",
+    "deepmerge": "^4.3.1",
     "iconv-lite": "^0.6.3",
     "md5": "^2.3.0",
     "reflect-metadata": "^0.2.2",

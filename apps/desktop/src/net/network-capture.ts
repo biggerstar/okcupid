@@ -1,11 +1,12 @@
 import { globalMainPathParser } from '@/global/global-main-path-parser';
+import globalProxy from '@xcodebuild/global-proxy';
 import { fork } from 'child_process';
+import merge from 'deepmerge';
 import { dialog } from 'electron';
 import path from 'path';
 import process from "process";
 import { fileURLToPath } from 'url';
-import { disableProxy, enableProxy } from './proxy';
-import globalProxy from '@xcodebuild/global-proxy'
+import { disableProxy } from './proxy';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,7 +27,8 @@ export class NetworkCapture {
   public loopInterval: number = 500;
   private onResponseList: Function[] = [];
   private onResponseItemList: Function[] = [];
-  private _nextNewIds = []
+  private _nextNewIds: string[] = []
+  private urlMap = new Map()
   public constructor() {
     // 确保进程退出时清理资源
     process.on('exit', this._cleanup.bind(this));
@@ -68,6 +70,8 @@ export class NetworkCapture {
       this._childProcess.on('exit', (code) => {
         if (code !== 0) {
           console.error(`代理服务异常退出，代码: ${code}`);
+          // dialog.showErrorBox(`代理服务异常退出`, `可能是端口被占用 ${code}`);
+          process.exit(1)
         }
         this._childProcess = null;
       });
@@ -80,7 +84,10 @@ export class NetworkCapture {
   }
 
   public async stop() {
+    this.urlMap.clear()
+    //@ts-ignore
     await globalProxy.disable('https')
+    //@ts-ignore
     await globalProxy.disable('http')
     await disableProxy().catch(() => { disableProxy() });
     clearInterval(this._loopFetchResponseTimer);
@@ -128,7 +135,7 @@ export class NetworkCapture {
   }
 
   private _loopFetchResponse() {
-    const urlMap = new Map()
+    this.urlMap = new Map()
     this._loopFetchResponseTimer = setInterval(async () => {
       let res
       try {
@@ -138,23 +145,15 @@ export class NetworkCapture {
         this.onResponseList.forEach((func) => func(res));
         const dataList = Object.values(res.data?.data || {})
         dataList.forEach((item: Record<any, any>) => {
-          if (item.url) {
-            urlMap.set(item.id, { url: item.url, startTime: item.url })
-            return
-          }
-          const record = urlMap.get(item.id) || {}
-          this.onResponseItemList.forEach((func) => func({
-            ...record,
-            ...item,
-          }))
-          // urlMap.delete(item.id)
+          const record: Record<any, any> = merge(item, this.urlMap.get(item.id) || {})
+          this.urlMap.set(record.id, record)
+          if (record.res?.base64 === undefined) return  // req
+          this.onResponseItemList.forEach((func) => func(record))
         })
       }
       // 移除 三分钟前的映射
-      urlMap.forEach((val, key) => {
-        if (val.startTime + (1000 * 5 * 60) <= Date.now()) {
-          urlMap.delete(key)
-        }
+      this.urlMap.forEach((val, key) => {
+        if (val.startTime + (1000 * 5 * 60) <= Date.now()) this.urlMap.delete(key)
       })
     }, this.loopInterval);
   }
@@ -183,7 +182,15 @@ export class NetworkCapture {
       });
       const res = await response.json();
       if (res.data?.lastId) this.lastRowId = res.data?.lastId
-      this._nextNewIds = res.data?.newIds || []
+      this._nextNewIds = [...res.data?.newIds, ...res.data?.ids]
+        .filter((id) => {
+          const data = this.urlMap.get(id)
+          return data ? !data.res?.base64 : true
+        })
+        .reduce((arr, cur) => {
+          if (!arr.includes(arr)) arr.push(cur)
+          return arr;
+        }, [])
       return res;
     } catch (error) {
       console.error('Fetch error:', error.message);
