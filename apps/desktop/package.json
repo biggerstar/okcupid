@@ -17,15 +17,14 @@
     "pack:linux": "pnpm -w run build && electron-builder --linux"
   },
   "dependencies": {
+    "@xcodebuild/global-proxy": "^0.0.6",
     "custom-electron-titlebar": "^4.2.8",
-    "exit-hook": "^4.0.0",
     "iconv-lite": "^0.6.3",
     "md5": "^2.3.0",
-    "original-fs": "^1.2.0",
     "reflect-metadata": "^0.2.2",
-    "set-cookie-parser": "^2.7.1",
     "set-global-proxy": "^0.2.4",
     "sqlite3": "^5.1.2",
+    "sudo-prompt": "^9.2.1",
     "typeorm": "0.3.17",
     "whistle": "^2.9.99"
   },

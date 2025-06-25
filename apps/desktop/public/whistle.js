@@ -1,3 +1,5 @@
+process.env.ELECTRON_RUN_AS_NODE = '1';
+
 const whistle = require('whistle')
 
 const port = parseInt(process.env.PORT || '12306');

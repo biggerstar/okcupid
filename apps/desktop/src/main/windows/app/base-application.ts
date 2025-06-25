@@ -30,9 +30,9 @@ export abstract class BaseApplication<WindowType extends BrowserWindow> {
     app.whenReady().then(() => this.createMainWindow());
     networkCapture.start()
 
-    app.on('window-all-closed', () => {
+    app.on('window-all-closed', async () => {
       this.win = null;
-      networkCapture.stop()
+      await networkCapture.stop()
       // if (process.platform !== 'darwin') 
       app.quit();
     });

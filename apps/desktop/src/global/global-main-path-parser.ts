@@ -18,7 +18,7 @@ class GlobalMainPathParser extends GlobalRendererPathParser{
    * */
    public resolveDB(dbName: string): string {
     return globalEnv.isDev ?
-      path.resolve(`./db/${dbName.trim()}.sqlite3`) :
+      path.resolve(`./db/${dbName.trim()}.db`) :
       this.resolveLocalComputer(`./data/${dbName.trim()}.dat`)
   }
 }

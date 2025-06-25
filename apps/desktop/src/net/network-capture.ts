@@ -2,8 +2,10 @@ import { globalMainPathParser } from '@/global/global-main-path-parser';
 import { fork } from 'child_process';
 import { dialog } from 'electron';
 import path from 'path';
-import proxy from 'set-global-proxy';
+import process from "process";
 import { fileURLToPath } from 'url';
+import { disableProxy, enableProxy } from './proxy';
+import globalProxy from '@xcodebuild/global-proxy'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,7 +27,6 @@ export class NetworkCapture {
   private onResponseList: Function[] = [];
   private onResponseItemList: Function[] = [];
   private _nextNewIds = []
-  private _requestIdList = [];
   public constructor() {
     // 确保进程退出时清理资源
     process.on('exit', this._cleanup.bind(this));
@@ -54,16 +55,13 @@ export class NetworkCapture {
       });
 
       // 设置全局代理
-      this._proxyEnabled = await proxy.enableProxy({
-        host: this.host,
-        port: this.port,
-        sudo: false,
-      });
+      await globalProxy.enable(this.host, this.port, 'http')
+      await globalProxy.enable(this.host, this.port, 'https')
 
+      this._proxyEnabled = true
       this._running = true;
-      if (this._proxyEnabled) {
-        console.log('成功设置全局代理');
-      }
+
+      console.log('成功设置全局代理');
       this._loopFetchResponse();
 
       // 监听子进程退出
@@ -82,7 +80,9 @@ export class NetworkCapture {
   }
 
   public async stop() {
-    proxy.disableProxy(false);
+    await globalProxy.disable('https')
+    await globalProxy.disable('http')
+    await disableProxy().catch(() => { disableProxy() });
     clearInterval(this._loopFetchResponseTimer);
     this.clearEvent();
 
@@ -100,6 +100,7 @@ export class NetworkCapture {
       console.log('代理服务已停止');
     } catch (error) {
       console.error('停止代理服务失败:', error);
+      dialog.showErrorBox('停止代理服务失败', error?.message || '')
       // 强制清理
       if (this._childProcess) {
         this._childProcess.kill('SIGKILL');
