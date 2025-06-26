@@ -6,7 +6,10 @@ const port = parseInt(process.env.PORT || '12306');
 const localhost = process.env.LOCALHOST || '127.0.0.1';
 
 // 启动whistle服务
-whistle({ port }, () => {
+const whistleInstance = whistle({ 
+  port,
+ }, () => {
+  whistleInstance.rulesUtil.properties.setEnableCapture(true);
   console.log(`Whistle代理服务已启动 - http://${localhost}:${port}`);
 });
 
