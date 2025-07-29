@@ -14,7 +14,9 @@ declare global {
     hideWindow(): Promise<void>
     isShow(): Promise<boolean>
     loadURL(url: string): Promise<void>
+    getURL(): Promise<void | string>
     getPruductList(options: Record<any, any>): Promise<any>
+    getOneList(id: string): Promise<any>
     deleteProduct(ids: string[]): Promise<void>
   }
 

@@ -64,10 +64,22 @@ const [Grid, gridApi] = useVbenVxeGrid({
     },
     exportConfig: {
       types: ['csv', 'txt'],
+      includeFields: [
+        'index',
+        'keyword',
+        'detailUrl',
+        'title',
+        'color',
+        'size',
+        'releaseTime',
+        'updateTime',
+        'remark',
+      ],
       columnFilterMethod({ column }) {
-        if (column.type === 'checkbox') return false
+        console.log(`🚀 ~ columnFilterMethod ~ column:`, column)
+        if (column.type === 'checkbox') return
         return true
-      }
+      },
     },
     proxyConfig: {
       ajax: {

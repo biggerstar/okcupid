@@ -6,6 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import process from 'process';
 import '../orm/data-source';
+import "./hotkey";
 import "./ipc";
 import "./windows/app/auth";
 

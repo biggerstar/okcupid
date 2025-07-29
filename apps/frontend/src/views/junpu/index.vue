@@ -65,6 +65,16 @@ const [Grid, gridApi] = useVbenVxeGrid({
     },
     exportConfig: {
       types: ['csv', 'txt'],
+      includeFields: [
+        'index',
+        'keyword',
+        'detailUrl',
+        'title',
+        'color',
+        'size',
+        'releaseTime',
+        'remark',
+      ],
       columnFilterMethod({ column }) {
         if (column.type === 'checkbox') return false
         return true

@@ -14,7 +14,14 @@ ipcMain.handle('is-window-show', () => {
 })
 
 ipcMain.handle('load-url', (_, url) => {
-  if (browserinternetView.isRunnning()) {
+  if (browserinternetView.isRunning()) {
     browserinternetView.win.webContents.loadURL(url);
   }
+})
+
+ipcMain.handle('get-current-url', (_, url) => {
+  if (browserinternetView.isRunning()) {
+    return browserinternetView.win.webContents.getURL()
+  }
+  return undefined
 })

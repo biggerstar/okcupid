@@ -1,5 +1,5 @@
 import { globalEnv } from "@/global/global-env";
-import { app, BrowserWindow, powerSaveBlocker } from "electron";
+import { app, BrowserWindow, globalShortcut, powerSaveBlocker } from "electron";
 import os from "node:os";
 import process from "node:process";
 
@@ -27,6 +27,10 @@ export abstract class BaseApplication<WindowType extends BrowserWindow> {
 
   public initAppWindow() {
     app.whenReady().then(() => this.createMainWindow());
+
+    app.on('will-quit', () => {
+      globalShortcut.unregisterAll()
+    })
 
     app.on('window-all-closed', async () => {
       this.win = null;

@@ -21,6 +21,9 @@ const __API__ = {
   async getPruductList(options = {}) {
     return ipcRenderer.invoke('get-product-data', options)
   },
+  async getOneList(options = {}) {
+    return ipcRenderer.invoke('get-one-product', options)
+  },
   async deleteProduct(ids = {}) {
     return ipcRenderer.invoke('delete-product', ids)
   },
@@ -35,6 +38,9 @@ const __API__ = {
   },
   loadURL(url: string) {
     return ipcRenderer.invoke('load-url', url);
+  },
+  getURL() {
+    return ipcRenderer.invoke('get-current-url');
   }
 }
 contextBridge.exposeInMainWorld('__API__', __API__)
