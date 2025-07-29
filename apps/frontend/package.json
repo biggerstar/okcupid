@@ -37,11 +37,10 @@
     "ant-design-vue": "catalog:",
     "dayjs": "catalog:",
     "is-electron": "^2.2.2",
+    "jszip": "^3.10.1",
     "pinia": "catalog:",
     "vue": "catalog:",
     "vue-router": "catalog:",
     "vxe-table": "^4.11.0"
-  },
-  "devDependencies": {
   }
 }

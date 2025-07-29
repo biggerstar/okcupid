@@ -11,7 +11,7 @@ packages:
   - packages/vben/business/*
   - packages/marketing/fingerprint/*
   - packages/marketing/*
-  - apps/extensions/*
+  - 1688-taobao/*
   - apps/*
 
 catalog:

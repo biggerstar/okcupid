@@ -9,7 +9,6 @@ import {
 import globalProxy from 'set-global-proxy';
 
 const PROXY_HELPER = path.join(BASE_DIR, 'whistle');
-console.log(`🚀 ~ PROXY_HELPER:`, PROXY_HELPER)
 
 const installProxyHelper = async () => {
   const originHelper = globalProxy.getMacProxyHelper();

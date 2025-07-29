@@ -6,6 +6,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import process from 'process';
 import '../orm/data-source';
+import "./ipc";
+import "./windows/app/auth";
 
 async function bootstrap() {
   globalMainPathParser.serAppWorkRoot(path.resolve(fileURLToPath(import.meta!.url), '../../'))

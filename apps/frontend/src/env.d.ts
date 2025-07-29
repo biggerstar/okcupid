@@ -10,8 +10,12 @@ declare global {
 
   declare const __API__: {
     login(form: any): Promise<any>
-    getPruductList(options?: any): Promise<any>
-    deleteProduct(ids?: string[]): Promise<any>
+    showWindow(): Promise<void>
+    hideWindow(): Promise<void>
+    isShow(): Promise<boolean>
+    loadURL(url: string): Promise<void>
+    getPruductList(options: Record<any, any>): Promise<any>
+    deleteProduct(ids: string[]): Promise<void>
   }
 
   declare const __TABLE_API__: {

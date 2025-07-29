@@ -1,6 +1,7 @@
 import { initPreferences } from '@vben/preferences';
 import { unmountGlobalLoading } from '@vben/utils';
 
+import { useAccessStore } from '@vben/stores';
 import { overridesPreferences } from './preferences';
 
 /**
@@ -24,6 +25,9 @@ async function initApplication() {
   const { bootstrap } = await import('./bootstrap');
   await bootstrap(namespace);
 
+  const accessStore = useAccessStore();
+  accessStore.setAccessToken('faketoken');
+  
   // 移除并销毁loading
   unmountGlobalLoading();
 }

@@ -21,7 +21,7 @@ export class ProductEntity extends BaseEntity {
   deliveryDay: number
 
   @Column({ type: 'json' })
-  skuList: Record<any, any>
+  data: Record<any, any>
 
   @CreateDateColumn()
   created_time: Date

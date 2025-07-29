@@ -23,6 +23,18 @@ const __API__ = {
   },
   async deleteProduct(ids = {}) {
     return ipcRenderer.invoke('delete-product', ids)
+  },
+  showWindow() {
+    return ipcRenderer.invoke('show-window');
+  },
+  hideWindow() {
+    return ipcRenderer.invoke('hide-window');
+  },
+  isShow() {
+    return ipcRenderer.invoke('is-window-show');
+  },
+  loadURL(url: string) {
+    return ipcRenderer.invoke('load-url', url);
   }
 }
 contextBridge.exposeInMainWorld('__API__', __API__)

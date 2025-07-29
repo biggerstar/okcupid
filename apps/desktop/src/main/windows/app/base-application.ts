@@ -1,5 +1,4 @@
 import { globalEnv } from "@/global/global-env";
-import { networkCapture } from "@/net/network-capture";
 import { app, BrowserWindow, powerSaveBlocker } from "electron";
 import os from "node:os";
 import process from "node:process";
@@ -28,22 +27,12 @@ export abstract class BaseApplication<WindowType extends BrowserWindow> {
 
   public initAppWindow() {
     app.whenReady().then(() => this.createMainWindow());
-    networkCapture.start()
 
     app.on('window-all-closed', async () => {
       this.win = null;
-      await networkCapture.stop()
       // if (process.platform !== 'darwin') 
       app.quit();
     });
-
-    app.on('before-quit', () => {
-      networkCapture.stop()
-    })
-
-    app.on('will-quit', () => {
-      networkCapture.stop()
-    })
 
     app.on('second-instance', () => {
       if (this.win && !this.win.isDestroyed()) {

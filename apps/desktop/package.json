@@ -1,7 +1,7 @@
 {
-  "name": "econmerce-crawler",
+  "name": "econmerce-crawler-junpu-52",
   "private": true,
-  "version": "0.0.8",
+  "version": "0.0.3",
   "main": "marketing/main/index.js",
   "description": "",
   "type": "commonjs",

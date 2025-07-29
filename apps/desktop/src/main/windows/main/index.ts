@@ -1,2 +1,2 @@
 export * from './ipc';
-export * from './network-capture';
+// export * from './network-capture';

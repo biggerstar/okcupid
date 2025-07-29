@@ -17,6 +17,20 @@ import { useAccessStore, useUserStore } from '@vben/stores';
 import { useAuthStore } from '#/store';
 import { isElectron } from '#/utils/constant';
 import LoginForm from '#/views/_core/authentication/login.vue';
+import { Button as AButton, Space as ASpace } from 'ant-design-vue';
+
+const displayWindow = ref(false);
+
+async function doDisplayWindow() {
+  await __API__.isShow() ? __API__.hideWindow() : __API__.showWindow();
+  displayWindow.value = await __API__.isShow();
+}
+
+setInterval(async () => displayWindow.value = await __API__.isShow(), 500)
+
+function loadURL(url: string) {
+  __API__.loadURL(url);
+}
 
 const notifications = ref<NotificationItem[]>([
   {
@@ -125,6 +139,23 @@ watch(
         <UserDropdown :avatar :menus :text="userStore.userInfo?.username" description="" tag-text="Pro" side="right"
           @logout="handleLogout" />
       </div> -->
+    </template>
+    <template #aside-footer>
+      <div class="flex flex-col justify-center items-center mb-[10px]">
+        <ASpace direction="vertical">
+          <AButton @click="() => loadURL('https://pc.jp0663.com')" v-show="displayWindow"
+            style="width: 70px; color: #ff5502;">
+            军埔
+          </AButton>
+          <AButton @click="() => loadURL('https://www.52dsy.com')" v-show="displayWindow"
+            style="width: 70px; color: #e4393c;">
+            52电商
+          </AButton>
+          <AButton @click="doDisplayWindow" :type="displayWindow ? 'primary' : 'text'">
+            {{ displayWindow ? '隐 藏' : '选 品' }}
+          </AButton>
+        </ASpace>
+      </div>
     </template>
   </BasicLayout>
 </template>

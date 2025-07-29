@@ -7,7 +7,7 @@ export class MainWindow extends BaseApplication<BaseHashRouterBrowserWindow> {
   /** 主窗口对象引用 */
   public win: BaseHashRouterBrowserWindow | null = null;
   private loadingWindow: BaseHashRouterBrowserWindow | null = null;
-  public DEFAULT_MAIN_WINDOW_WIDTH = 1300;
+  public DEFAULT_MAIN_WINDOW_WIDTH = 1600;
   public DEFAULT_MAIN_WINDOW_HEIGHT = 900;
   private __nextResetDefaultWindowSize = true;
 
@@ -29,7 +29,7 @@ export class MainWindow extends BaseApplication<BaseHashRouterBrowserWindow> {
     });
     this.win.webContents.setBackgroundThrottling(false)
     // this.win.gotoHashRouter({hash: '/'}).then();
-    this.win.gotoHashRouter({ hash: '/taobao' }).then();
+    this.win.gotoHashRouter({ hash: '/junpu' }).then();
     // this.win.webContents.openDevTools()
     console.log(os.arch(), process.arch);
     this.win.webContents.on('did-navigate-in-page', (_, url) => {
