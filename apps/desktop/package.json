@@ -1,7 +1,7 @@
 {
-  "name": "econmerce-crawler-junpu-52",
+  "name": "okcupid",
   "private": true,
-  "version": "0.0.5",
+  "version": "0.0.2",
   "main": "marketing/main/index.js",
   "description": "",
   "type": "commonjs",
@@ -22,6 +22,7 @@
     "deepmerge": "^4.3.1",
     "iconv-lite": "^0.6.3",
     "md5": "^2.3.0",
+    "puppeteer": "^24.15.0",
     "reflect-metadata": "^0.2.2",
     "set-global-proxy": "^0.2.4",
     "sqlite3": "^5.1.2",

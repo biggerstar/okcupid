@@ -3,7 +3,7 @@
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
   "appId": "god",
   "asar": true,
-  "productName": "FLJ内部使用-军埔五二爬取信息",
+  "productName": "okcupid",
   "directories": {
     "output": "release/${version}",
   },

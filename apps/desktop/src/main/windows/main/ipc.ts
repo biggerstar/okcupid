@@ -1,5 +1,6 @@
 import { ipcMain } from "electron";
 import md5 from 'md5';
+import { getOkcupidToken } from "./puppeteer";
 import { AC } from "./users";
 
 ipcMain.handle('login', (_ev, options: Record<any, any> = {}) => {
@@ -23,4 +24,8 @@ ipcMain.handle('login', (_ev, options: Record<any, any> = {}) => {
       message: '登录失败, 你的 IP 已经被记录'
     }
   }
+})
+
+ipcMain.handle('get-puppeteer-result', async (_: any, wsLink: string) => {
+  return getOkcupidToken(wsLink)
 })

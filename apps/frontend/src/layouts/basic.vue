@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import type { NotificationItem } from '@vben/layouts';
 
-import ImageViewer from '#/components/ImageViewer.vue';
 import { AuthenticationLoginExpiredModal, useVbenModal } from '@vben/common-ui';
 import { useWatermark } from '@vben/hooks';
 import {
@@ -17,7 +16,7 @@ import { computed, ref, watch } from 'vue';
 import { useAuthStore } from '#/store';
 import { isElectron } from '#/utils/constant';
 import LoginForm from '#/views/_core/authentication/login.vue';
-import { Button as AButton, Space as ASpace, message } from 'ant-design-vue';
+import { message } from 'ant-design-vue';
 
 const displayWindow = ref(false);
 const displayExportImages = ref(false);
@@ -266,7 +265,7 @@ watch(
       </div> -->
     </template>
     <template #aside-footer>
-      <div class="flex flex-col justify-center items-center mb-[10px]">
+      <!-- <div class="flex flex-col justify-center items-center mb-[10px]">
         <ASpace direction="vertical" class="mb-[50px]">
           <AButton @click="() => exportImages()" v-show="displayExportImages" style="width: 75px; font-size: 0.70rem;">
             导出图片
@@ -289,7 +288,7 @@ watch(
           <ImageViewer v-if="showImageViewer" ref="imageViewerRef" :options="currentExportImagesOptions"
             style="z-index: 999999999;" />
         </downloadImagesModal>
-      </div>
+      </div> -->
     </template>
   </BasicLayout>
 </template>

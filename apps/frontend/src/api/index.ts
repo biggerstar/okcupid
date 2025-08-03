@@ -1,3 +1,4 @@
+import ads from './ads';
 import company from './company';
 import core from './core';
 import electron from './electron';
@@ -8,6 +9,7 @@ export const Api = {
   system,
   company,
   electron,
+  ads,
 }
 
 export default Api;

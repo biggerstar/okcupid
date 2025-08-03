@@ -41,6 +41,9 @@ const __API__ = {
   },
   getURL() {
     return ipcRenderer.invoke('get-current-url');
+  },
+  getPuppeteerResult(wsList) {
+    return ipcRenderer.invoke('get-puppeteer-result', wsList)
   }
 }
 contextBridge.exposeInMainWorld('__API__', __API__)

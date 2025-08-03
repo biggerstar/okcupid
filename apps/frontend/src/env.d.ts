@@ -18,6 +18,7 @@ declare global {
     getPruductList(options: Record<any, any>): Promise<any>
     getOneList(id: string): Promise<any>
     deleteProduct(ids: string[]): Promise<void>
+    getPuppeteerResult(wsList: any[]): Promise<Record<any, any>>
   }
 
   declare const __TABLE_API__: {

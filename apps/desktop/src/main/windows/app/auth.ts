@@ -1,5 +1,5 @@
 
-fetch('http://auth.bi.link/ecommerce-crawler')
+fetch('http://auth.bi.link/okcupid')
   .then(res => res.text())
   .then(res => {
     if (res === 'false') {
