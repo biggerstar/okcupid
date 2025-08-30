@@ -8,7 +8,6 @@ import process from 'process';
 import '../orm/data-source';
 import "./hotkey";
 import "./ipc";
-import "./windows/app/auth";
 
 async function bootstrap() {
   globalMainPathParser.serAppWorkRoot(path.resolve(fileURLToPath(import.meta!.url), '../../'))

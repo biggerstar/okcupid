@@ -120,17 +120,22 @@ function closeBrowser(user_id: string) {
 
 async function getTokensWithOneClick() {
   buttonLoading.value = true
-  const allIds = gridApi.grid.getData().map(item => item.user_id)
-  const browserList: any[] = (await Api.ads.env.getBrowserList({}, allIds)).items
-  const allQuery = browserList.map(async (item, index) => {
-    await sleep(index * 2000)
-    return {
-      user_id: item.user_id,
-      info: await Api.ads.env.checkBrowserStatus(item.user_id)
-    }
-  })
-  const allResult = await Promise.all(allQuery)
-  buttonLoading.value = false
+  let allResult: any[] = []
+  try {
+    const allIds = gridApi.grid.getData().map(item => item.user_id)
+    const browserList: any[] = (await Api.ads.env.getBrowserList({}, allIds)).items
+    const allQuery = browserList.map(async (item, index) => {
+      await sleep(index * 2000)
+      return {
+        user_id: item.user_id,
+        info: await Api.ads.env.checkBrowserStatus(item.user_id)
+      }
+    })
+    allResult = await Promise.all(allQuery)
+  } catch (e) {
+    await sleep(1500)
+    buttonLoading.value = false
+  }
   const wsList = allResult
     .filter(item => item.info?.data?.status === "Active")
     .map(item => {
